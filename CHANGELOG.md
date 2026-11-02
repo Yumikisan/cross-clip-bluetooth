@@ -21,7 +21,7 @@
 | 对象 | 主页 | 赞助 |
 | --- | --- | --- |
 | 原项目 / 原作者 aubynsamuel | https://github.com/aubynsamuel | https://www.buymeacoffee.com/aubynsamuel |
-| 本分支 / Yumikisan | https://github.com/Yumikisan239 | https://afdian.com/a/Yumikisan239AFD |
+| 本分支 / Yumikisan | https://github.com/Yumikisan | https://afdian.com/a/Yumikisan239AFD |
 
 不改动「只用蓝牙、零局域网、零云端」这个前提：所有传输仍然走 RFCOMM（SPP），配对后即可用。
 
@@ -32,7 +32,7 @@
 | `CCB-Windows-2.4.27.exe` | **当前版本（Windows）**。自包含单文件，双击即用，无需安装 .NET 运行时 |
 | `CCB-Android-2.5.12.apk` | **当前版本（安卓）**。`versionCode 90` / `versionName 2.5.12`，已签名 |
 
-安装包不在仓库里，都在 [Releases](https://github.com/Yumikisan239/cross-clip-bluetooth/releases)。
+安装包不在仓库里，都在 [Releases](https://github.com/Yumikisan/cross-clip-bluetooth/releases)。
 命名从 2.2.0 起由 `ClipSync-Fork-*` 改为 `CBB-*`，从 2.3.0 起再由 `CBB-*` 改为 `CCB-*`。
 
 > 安卓端 `applicationId` 与上游相同（`com.aubynsamuel.clipsync`），
@@ -869,7 +869,7 @@ dotnet publish -c Release -r win-x64 --self-contained true \
 尤其是签名密钥：仓库里带 key，等于把「可覆盖安装」的能力发给所有人）。
 
 ```bash
-git clone https://github.com/Yumikisan239/cross-clip-bluetooth.git
+git clone https://github.com/Yumikisan/cross-clip-bluetooth.git
 cd cross-clip-bluetooth
 
 # 跟上游对照

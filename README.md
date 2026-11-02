@@ -3,7 +3,7 @@
 > Clipboard, files and folders between **Windows** and **Android**, over plain **Bluetooth Classic** (RFCOMM/SPP).
 > No account, no cloud, no LAN, no pairing server — the two devices talk to each other and nothing else.
 
-[![Release](https://img.shields.io/github/v/release/Yumikisan239/cross-clip-bluetooth?label=release&color=2f81f7)](https://github.com/Yumikisan239/cross-clip-bluetooth/releases)
+[![Release](https://img.shields.io/github/v/release/Yumikisan/cross-clip-bluetooth?label=release&color=2f81f7)](https://github.com/Yumikisan/cross-clip-bluetooth/releases)
 [![Android](https://img.shields.io/badge/Android-7.0%2B%20(minSdk%2024)-3ddc84)](android)
 [![Windows](https://img.shields.io/badge/Windows-10%20%2F%2011-0078d4)](windows)
 [![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
@@ -55,7 +55,7 @@ Every entry, file name and timestamp in these captures is fabricated for the pur
 
 ## Install
 
-Both artifacts are attached to the latest [Release](https://github.com/Yumikisan239/cross-clip-bluetooth/releases).
+Both artifacts are attached to the latest [Release](https://github.com/Yumikisan/cross-clip-bluetooth/releases).
 
 - **Windows** — `CCB-Windows-<ver>.exe`, a self-contained single file. Double click, no .NET runtime needed. Unpack it anywhere; settings live in `%APPDATA%\ClipSync`.
 - **Android** — `CCB-Android-<ver>.apk`. The `applicationId` is the same as upstream (`com.aubynsamuel.clipsync`) but the signing key is not, so **uninstall the official build first**. Later fork versions install over each other normally.
@@ -162,7 +162,7 @@ Windows 端历史：两列错落卡片、缩略图、按内容类型着色的标
 
 ### 安装
 
-两个平台的安装包都在最新的 [Release](https://github.com/Yumikisan239/cross-clip-bluetooth/releases) 里。
+两个平台的安装包都在最新的 [Release](https://github.com/Yumikisan/cross-clip-bluetooth/releases) 里。
 
 - **Windows**：`CCB-Windows-<版本>.exe`，自包含单文件，双击即用，不需要装 .NET 运行时。配置在 `%APPDATA%\ClipSync`。
 - **安卓**：`CCB-Android-<版本>.apk`。`applicationId` 与原版相同（`com.aubynsamuel.clipsync`），但**签名不同**，装过官方版的机器必须先卸载；本分支后续版本之间可以直接覆盖安装。
@@ -236,6 +236,6 @@ cd android && gradle test # 帧协议 / 握手 / 文件夹 / 取消 的单元测
 | | 主页 | 赞助 |
 | --- | --- | --- |
 | 原项目 / 原作者 **aubynsamuel** | https://github.com/aubynsamuel | https://www.buymeacoffee.com/aubynsamuel |
-| 本分支 / **Yumikisan** | https://github.com/Yumikisan239 | https://afdian.com/a/Yumikisan239AFD |
+| 本分支 / **Yumikisan** | https://github.com/Yumikisan | https://afdian.com/a/Yumikisan239AFD |
 
 上游是两个独立仓库：[clipsync-android](https://github.com/aubynsamuel/clipsync-android)、[clipsync-windows](https://github.com/aubynsamuel/clipsync-windows)。没有他的工作，就没有这个分支。

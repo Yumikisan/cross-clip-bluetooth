@@ -1,0 +1,29 @@
+# --- Android ---------------------------------------------------------------
+android/.gradle/
+android/build/
+android/app/build/
+android/baselineProfile/build/
+android/.kotlin/
+android/.idea/
+android/captures/
+android/local.properties
+*.iml
+
+# Signing material never belongs in a repository: an APK signed with a published
+# key can be installed *over* the real one on any device that already has it.
+android/keystore/
+*.jks
+*.keystore
+key.properties
+
+# --- Windows ---------------------------------------------------------------
+windows/bin/
+windows/obj/
+windows/publish/
+windows/.vs/
+
+# --- repository ------------------------------------------------------------
+dist/
+release/
+*.log
+*.user

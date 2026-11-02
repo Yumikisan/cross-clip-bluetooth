@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- System share sheet label. The in-app language switch cannot reach the share sheet,
+         so this follows the system locale like every other app. -->
+    <string name="share_target_label">发送到电脑</string>
+
+    <!-- 无障碍服务在系统设置里的说明。此权限可以观察屏幕，因此必须写明读取什么、不读取什么。 -->
+    <string name="accessibility_service_label">Cross Clip 剪贴板捕获</string>
+    <string name="accessibility_service_summary">捕获复制动作，把剪贴板内容同步到已配对的蓝牙设备</string>
+    <string name="accessibility_service_description">识别复制动作（长按、点按「复制」、复制浮窗提示）并读取剪贴板，从而把文本、图片或文件发送到你在 Cross Clip 里选择的设备。
+
+本服务不读取屏幕内容，不收集你的输入，也不上传任何数据：内容只经过你自己的蓝牙链路。当密码管理器、银行类应用阻止读取剪贴板时，程序会静默跳过。
+
+部分系统会积极回收后台服务。若自动同步失效，请允许 Cross Clip 自启动并关闭后台限制。</string>
+</resources>

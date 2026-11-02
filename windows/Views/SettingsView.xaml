@@ -1,0 +1,1224 @@
+<UserControl x:Class="ClipSyncWindows.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:ClipSyncWindows.ViewModels"
+             xmlns:services="clr-namespace:ClipSyncWindows.Services"
+             xmlns:converters="clr-namespace:ClipSyncWindows.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="740" d:DesignWidth="380">
+
+    <UserControl.DataContext>
+        <viewModels:SettingsViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVis" />
+
+        <Style x:Key="CleanButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#DC2626" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="14,7" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#B91C1C" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- One card per settings group: same visual language as the Android settings page
+             (rounded surface, title inside, hint under the title). -->
+        <Style x:Key="GroupCard" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="14,12,14,14" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Background"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=CardBackground}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}" />
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}" />
+            <Setter Property="Opacity" Value="0.7" />
+        </Style>
+
+        <Style x:Key="RowText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+        </Style>
+
+        <Style x:Key="HintText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Margin" Value="0,2,0,0" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Opacity" Value="0.65" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}" />
+        </Style>
+
+        <!-- Segmented pill: the settings counterpart of the Android choice chips.
+             IsMouseOver is declared first so hovering a selected pill does not grey it out. -->
+        <Style x:Key="SegPill" TargetType="RadioButton">
+            <Setter Property="Margin" Value="0,0,6,0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="Bd"
+                            MinWidth="30"
+                            Padding="10,4"
+                            Background="Transparent"
+                            BorderBrush="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemHoverBackground}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ShareButtonColor}" />
+                                <Setter TargetName="Bd" Property="BorderBrush"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ShareButtonColor}" />
+                                <Setter Property="Foreground"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ShareButtonForegroundColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+        </Style>
+
+        <!-- Text-only action: used where a full button would outweigh the row it sits in. -->
+        <Style x:Key="LinkButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <!-- ShareButtonColor is a *fill* (very light in the light theme); using it as text
+                 made the link nearly invisible. The foreground of that same button is the
+                 readable version of the accent. -->
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ShareButtonForegroundColor}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock Text="{TemplateBinding Content}"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   TextDecorations="Underline"
+                                   VerticalAlignment="Center" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Drop-down row: WPF's default item container paints a light system highlight, which
+             leaves light text on light grey in the dark theme. -->
+        <Style x:Key="FieldComboItem" TargetType="ComboBoxItem">
+            <Setter Property="Padding" Value="9,5" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="ItemBd" Background="Transparent" CornerRadius="5"
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="ItemBd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemHoverBackground}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemSelectedBackground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="9,0" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="ItemContainerStyle" Value="{StaticResource FieldComboItem}" />
+            <Setter Property="Background"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=FieldBackground}" />
+            <Setter Property="BorderBrush"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton Focusable="False" ClickMode="Press"
+                                IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="ComboBd" CornerRadius="6" BorderThickness="1"
+                                            Background="{Binding Source={x:Static services:ThemeManager.Instance}, Path=FieldBackground}"
+                                            BorderBrush="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}">
+                                            <Path x:Name="Arrow" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                Margin="0,1,10,0" Data="M0,0 L3.5,4 L7,0"
+                                                Stroke="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                                                StrokeThickness="1.4" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="ComboBd" Property="BorderBrush"
+                                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemSelectedBorder}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+                            <ContentPresenter IsHitTestVisible="False" VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="9,0,22,0"
+                                Content="{TemplateBinding SelectionBoxItem}"
+                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                TextElement.Foreground="{TemplateBinding Foreground}" />
+
+                            <Popup x:Name="PART_Popup" Placement="Bottom" Focusable="False"
+                                AllowsTransparency="True" PopupAnimation="Fade" StaysOpen="False"
+                                IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <Border MinWidth="{TemplateBinding ActualWidth}" Margin="0,4,0,0" Padding="4"
+                                    CornerRadius="6" BorderThickness="1" MaxHeight="320"
+                                    Background="{Binding Source={x:Static services:ThemeManager.Instance}, Path=FieldPopupBackground}"
+                                    BorderBrush="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=FieldBackground}" />
+            <Setter Property="BorderBrush"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            <Setter Property="CaretBrush"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            <Setter Property="SelectionBrush"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemSelectedBorder}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="FieldBd" CornerRadius="6" BorderThickness="1"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="FieldBd" Property="BorderBrush"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemSelectedBorder}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- The passphrase field: same chrome as the other inputs, characters masked. -->
+        <Style TargetType="PasswordBox">
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=FieldBackground}" />
+            <Setter Property="BorderBrush"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            <Setter Property="CaretBrush"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="PskBd" CornerRadius="6" BorderThickness="1"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center"
+                                Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="PskBd" Property="BorderBrush"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemSelectedBorder}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Ordinary secondary action (Browse…, Clear hotkey): themed like the fields next to it. -->
+        <Style x:Key="SvcButton" TargetType="Button">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="SvcBd" CornerRadius="6" BorderThickness="1"
+                            Background="{Binding Source={x:Static services:ThemeManager.Instance}, Path=FieldBackground}"
+                            BorderBrush="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="SvcBd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemHoverBackground}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="SvcBd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemSelectedBackground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Row-level delete: a bare glyph that only shows its danger tint on hover, so the
+             storage table stays calm instead of being a wall of red buttons. -->
+        <Style x:Key="RowDeleteButton" TargetType="Button">
+            <Setter Property="Width" Value="22" />
+            <Setter Property="Height" Value="22" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="DelBd" CornerRadius="5" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="DelBd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemHoverBackground}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="DelBd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemSelectedBackground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- The − / + stepper: the stock button chrome is light and clashes with both themes. -->
+        <Style x:Key="StepButton" TargetType="Button">
+            <Setter Property="Width" Value="26" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground"
+                Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="StepBd" CornerRadius="6" BorderThickness="1"
+                            Background="{Binding Source={x:Static services:ThemeManager.Instance}, Path=FieldBackground}"
+                            BorderBrush="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="StepBd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemHoverBackground}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="StepBd" Property="Background"
+                                    Value="{Binding Source={x:Static services:ThemeManager.Instance}, Path=ListItemSelectedBackground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="{Binding Source={x:Static services:ThemeManager.Instance}, Path=CardBackground}">
+        <Grid Margin="20,18,4,18">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- header -->
+            <Grid Grid.Row="0" Margin="0,0,0,4">
+                <TextBlock Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.settings]}"
+                           FontSize="22" FontWeight="Bold"
+                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}" />
+            </Grid>
+
+            <!-- The scrollbar hugs the window edge, so the content needs its own right inset,
+                 otherwise fields and stepper buttons sit right on top of the thumb. -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,6,0,0"
+                          Padding="0,0,16,0">
+                <StackPanel>
+                    <!-- Storage management -->
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+
+                    <TextBlock Style="{StaticResource SectionTitle}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.storage]}" />
+
+                    <Grid Margin="0,2" Visibility="{Binding HasStorage, Converter={StaticResource BoolToVis}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!-- header row (same column widths as data rows). The type / count /
+                             size columns are deliberately narrow and packed together: spread
+                             across the full width the numbers drifted far from their labels. -->
+                        <Grid Grid.Row="0" Margin="0,0,0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="118" />
+                                <ColumnDefinition Width="58" />
+                                <ColumnDefinition Width="92" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="26" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Style="{StaticResource RowText}" FontSize="11" Opacity="0.65"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[col.type]}" />
+                            <TextBlock Grid.Column="1" Style="{StaticResource RowText}" FontSize="11" Opacity="0.65"
+                                       TextAlignment="Right"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[col.count]}" />
+                            <TextBlock Grid.Column="2" Style="{StaticResource RowText}" FontSize="11" Opacity="0.65"
+                                       TextAlignment="Right"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[col.size]}" />
+                        </Grid>
+
+                        <!-- data rows with hairline separators -->
+                        <ItemsControl Grid.Row="1" ItemsSource="{Binding StorageStats}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="1" />
+                                        </Grid.RowDefinitions>
+                                        <Grid Grid.Row="0" Margin="0,0,0,7">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="118" />
+                                                <ColumnDefinition Width="58" />
+                                                <ColumnDefinition Width="92" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="26" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Style="{StaticResource RowText}"
+                                                       TextTrimming="CharacterEllipsis" Text="{Binding Label}" />
+                                            <TextBlock Grid.Column="1" Style="{StaticResource RowText}"
+                                                       TextAlignment="Right" Text="{Binding Count}" />
+                                            <TextBlock Grid.Column="2" Style="{StaticResource RowText}"
+                                                       TextAlignment="Right" Text="{Binding SizeText}" />
+                                            <!-- One type at a time: the whole row's records and their
+                                                 stored file go, after an explicit confirmation. -->
+                                            <Button Grid.Column="4" Style="{StaticResource RowDeleteButton}"
+                                                    Tag="{Binding}" Click="StorageDeleteKind_Click"
+                                                    ToolTip="{Binding DeleteHint}">
+                                                <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets"
+                                                           FontSize="11"
+                                                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}" />
+                                            </Button>
+                                        </Grid>
+                                        <Rectangle Grid.Row="1" Height="1" Opacity="0.35"
+                                                   Fill="{Binding Source={x:Static services:ThemeManager.Instance}, Path=BorderBrush}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- total -->
+                        <Grid Grid.Row="2" Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="118" />
+                                <ColumnDefinition Width="58" />
+                                <ColumnDefinition Width="92" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="26" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" FontSize="12" Opacity="0.7"
+                                       Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.storageTotal]}" />
+                            <TextBlock Grid.Column="2" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                                       TextAlignment="Right" Text="{Binding StorageTotalText}" />
+                        </Grid>
+                    </Grid>
+
+                    <TextBlock Margin="0,2" FontSize="12" Opacity="0.6"
+                               Visibility="{Binding HasStorage, Converter={StaticResource InverseBoolToVis}}"
+                               Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.storageEmpty]}" />
+
+                    <Button Margin="0,10,0,0" HorizontalAlignment="Left"
+                            Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.cleanNow]}"
+                            Style="{StaticResource CleanButtonStyle}" Click="CleanNow_Click" />
+
+                    <Grid Margin="0,12,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.expireClean]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding AutoCleanExpired, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.imageRetention]}" />
+                        <ComboBox HorizontalAlignment="Right" Width="110"
+                                  ItemsSource="{Binding RetentionChoices}"
+                                  SelectedValue="{Binding ImageRetentionDays, Mode=TwoWay}"
+                                  SelectedValuePath="Days" />
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.fileRetention]}" />
+                        <ComboBox HorizontalAlignment="Right" Width="110"
+                                  ItemsSource="{Binding RetentionChoices}"
+                                  SelectedValue="{Binding FileRetentionDays, Mode=TwoWay}"
+                                  SelectedValuePath="Days" />
+                    </Grid>
+
+                    <Grid Margin="0,12,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.thresholdClean]}" />
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding ThresholdCleanupEnabled, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.maxStorage]}" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button Style="{StaticResource StepButton}" Content="−" Click="MaxStorageMinus_Click" />
+                            <TextBox Width="70" Margin="6,0" Text="{Binding MaxStorageMb, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                     HorizontalContentAlignment="Center" />
+                            <Button Style="{StaticResource StepButton}" Content="+" Click="MaxStoragePlus_Click" />
+                            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontSize="11" Opacity="0.6" Text="MB"
+                                       Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.cleanupPercent]}" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button Style="{StaticResource StepButton}" Content="−" Click="CleanupPercentMinus_Click" />
+                            <TextBox Width="70" Margin="6,0" Text="{Binding CleanupPercent, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                     HorizontalContentAlignment="Center" />
+                            <Button Style="{StaticResource StepButton}" Content="+" Click="CleanupPercentPlus_Click" />
+                            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontSize="11" Opacity="0.6" Text="%"
+                                       Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Personalisation: the four knobs that change how history looks, plus the
+                         source label. Grouped here so the general list stays about behaviour. -->
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+
+                    <TextBlock Style="{StaticResource SectionTitle}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.appearance]}" />
+
+                    <Grid Margin="0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.darkMode]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.appearanceHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top"
+                                  IsChecked="{Binding IsDark, Mode=TwoWay}" />
+                    </Grid>
+
+                    <StackPanel Margin="0,10,0,0">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.entryFont]}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,7,0,0">
+                            <RadioButton GroupName="HistFont" Style="{StaticResource SegPill}"
+                                         IsChecked="{Binding HistoryFontSmall, Mode=TwoWay}"
+                                         Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.fontSmall]}" />
+                            <RadioButton GroupName="HistFont" Style="{StaticResource SegPill}"
+                                         IsChecked="{Binding HistoryFontNormal, Mode=TwoWay}"
+                                         Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.fontNormal]}" />
+                            <RadioButton GroupName="HistFont" Style="{StaticResource SegPill}"
+                                         IsChecked="{Binding HistoryFontLarge, Mode=TwoWay}"
+                                         Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.fontLarge]}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,12,0,0">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.accentMode]}" />
+                        <TextBlock Style="{StaticResource HintText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.accentHint]}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,7,0,0">
+                            <RadioButton GroupName="HistAccent" Style="{StaticResource SegPill}"
+                                         IsChecked="{Binding AccentKind, Mode=TwoWay}"
+                                         Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.accentKind]}" />
+                            <RadioButton GroupName="HistAccent" Style="{StaticResource SegPill}"
+                                         IsChecked="{Binding AccentCustom, Mode=TwoWay}"
+                                         Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.accentCustom]}" />
+                            <!-- Only meaningful in custom mode, so it appears with it. -->
+                            <Button Style="{StaticResource LinkButton}" VerticalAlignment="Center"
+                                    Margin="6,0,0,0"
+                                    Visibility="{Binding AccentCustom, Converter={StaticResource BoolToVis}}"
+                                    Click="EditAccentColors_Click"
+                                    Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.editColors]}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,12,0,0">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.density]}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,7,0,0">
+                            <RadioButton GroupName="HistDensity" Style="{StaticResource SegPill}"
+                                         IsChecked="{Binding DensityCompact, Mode=TwoWay}"
+                                         Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.densityCompact]}" />
+                            <RadioButton GroupName="HistDensity" Style="{StaticResource SegPill}"
+                                         IsChecked="{Binding DensityNormal, Mode=TwoWay}"
+                                         Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.densityNormal]}" />
+                            <RadioButton GroupName="HistDensity" Style="{StaticResource SegPill}"
+                                         IsChecked="{Binding DensityCozy, Mode=TwoWay}"
+                                         Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.densityCozy]}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Grid Margin="0,14,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.thumbnails]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.thumbnailsHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding HistoryThumbnails, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,14,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.showSource]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.showSourceHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding ShowSourceDevice, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!-- General -->
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+
+                    <TextBlock Style="{StaticResource SectionTitle}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.general]}" />
+
+                    <Grid Margin="0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.language]}" />
+                        <CheckBox HorizontalAlignment="Right" Content="中文 / English"
+                                  IsChecked="{Binding IsChinese, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,10,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.closeFilterOnReset]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.closeFilterOnResetHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding CloseFilterOnReset, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,10,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoSync]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoSyncHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding AutoSyncEnabled, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,10,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoCopy]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoCopyHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding AutoCopyReceived, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,10,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.notify]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.notifyHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding ShowNotifications, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,10,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.notifySeconds]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.notifySecondsHint]}" />
+                        </StackPanel>
+                        <TextBox HorizontalAlignment="Right" Width="72" VerticalAlignment="Top"
+                                 Text="{Binding NotificationSeconds, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                 PreviewTextInput="NumberBox_PreviewTextInput"
+                                 HorizontalContentAlignment="Center" />
+                    </Grid>
+
+                    <!-- Security -->
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+
+                    <TextBlock Style="{StaticResource SectionTitle}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.security]}" />
+
+                    <Grid Margin="0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.confirmCode]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.confirmCodeHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding RequireConfirmCode, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!-- Layer 2: pre-shared key + AES-256-GCM. Independent of the Bluetooth link
+                         key, which the app can neither read nor force. -->
+                    <Grid Margin="0,12,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.secMode]}" />
+                        <ComboBox HorizontalAlignment="Right" Width="168" VerticalAlignment="Top"
+                                  ItemsSource="{Binding SecurityModeOptions}"
+                                  SelectedValuePath="Value"
+                                  SelectedValue="{Binding SecurityMode, Mode=TwoWay}">
+                            <!-- ItemTemplate instead of DisplayMemberPath: the latter is a plain
+                                 property path with no change notification, so the labels would
+                                 stay in the old language after a switch. -->
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Label}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                    <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                               Text="{Binding SecurityModeHint}" />
+                    <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.secModeHint]}" />
+
+                    <StackPanel Margin="0,10,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.psk]}" />
+                        <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                   Text="{Binding PskSummary}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                            <!-- Masked by default; the eye swaps in a plain TextBox so the key can be
+                                 checked character by character before it is saved. -->
+                            <Grid Width="220">
+                                <PasswordBox x:Name="PskBox" KeyDown="PskBox_KeyDown"
+                                             PasswordChanged="PskBox_PasswordChanged" />
+                                <TextBox x:Name="PskBoxPlain" Visibility="Collapsed"
+                                         KeyDown="PskBox_KeyDown" VerticalContentAlignment="Center"
+                                         TextChanged="PskBoxPlain_TextChanged" />
+                                <!-- Visibility is driven from code, not a trigger on
+                                     PasswordBox.Password: that is a plain CLR property, so a
+                                     binding to it never updates and the hint stayed on top of the
+                                     masked dots. -->
+                                <TextBlock x:Name="PskPlaceholder" IsHitTestVisible="False" Margin="9,0,0,0"
+                                           VerticalAlignment="Center" FontSize="12" Opacity="0.45"
+                                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[psk.placeholder]}" />
+                            </Grid>
+                            <Button x:Name="PskEyeButton" Style="{StaticResource SvcButton}" Margin="6,0,0,0"
+                                    Padding="9,5" Click="TogglePskVisibility_Click"
+                                    ToolTip="{Binding Source={x:Static services:I18n.Instance}, Path=[psk.show]}">
+                                <TextBlock x:Name="PskEyeIcon" FontFamily="Segoe MDL2 Assets"
+                                           FontSize="15" Text="&#xE7B3;" />
+                            </Button>
+                            <Button Style="{StaticResource SvcButton}" Margin="6,0,0,0"
+                                    Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.pskSave]}"
+                                    Click="SavePsk_Click" />
+                            <Button Style="{StaticResource SvcButton}" Margin="8,0,0,0"
+                                    Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.pskClear]}"
+                                    Click="ClearPsk_Click" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.pskMinLen]}" />
+                        <Button Style="{StaticResource SvcButton}" Margin="0,8,0,0"
+                                HorizontalAlignment="Left"
+                                Content="{Binding Source={x:Static services:I18n.Instance}, Path=[wiz.runFromSettings]}"
+                                Click="OpenWizard_Click" />
+                    </StackPanel>
+
+                    <Grid Margin="0,10,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.secLog]}" />
+                            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.secLogHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding SecurityLogEnabled, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!-- Transfer -->
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+
+                    <TextBlock Style="{StaticResource SectionTitle}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.transfer]}" />
+
+                    <Grid Margin="0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.maxFileSize]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.maxFileSizeHint]}" />
+                        </StackPanel>
+                        <ComboBox HorizontalAlignment="Right" Width="110" VerticalAlignment="Top"
+                                  ItemsSource="{Binding MaxFileSizeChoices}"
+                                  DisplayMemberPath="Label"
+                                  SelectedValuePath="Bytes"
+                                  SelectedValue="{Binding MaxFileSizeBytes, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!-- Sits directly under the size cap because it is the same subject: how
+                         much one transfer may carry. -->
+                    <Grid Margin="0,10,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.ignoreSizeLimit]}" />
+                            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.ignoreSizeLimitHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding IgnoreTransferSizeLimit, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,10,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.openFileLocation]}" />
+                            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.openFileLocationHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding OpenFileLocationOnClick, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,12,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.adaptive]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.adaptiveHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding AdaptiveFileSizeLimit, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,12,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoFileSync]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoFileSyncHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding AutoFileSync, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,12,0,2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource RowText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoHidePeripherals]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoHidePeripheralsHint]}" />
+                        </StackPanel>
+                        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"
+                                  IsChecked="{Binding AutoHidePeripheralDevices, Mode=TwoWay}" />
+                    </Grid>
+
+                    <TextBlock Style="{StaticResource RowText}" Margin="0,14,0,4"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.downloadFolder]}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding DownloadFolder, Mode=TwoWay}"
+                                 IsReadOnly="True" HorizontalScrollBarVisibility="Hidden" />
+                        <Button Grid.Column="1" Margin="6,0,0,0" Style="{StaticResource SvcButton}"
+                                Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.browse]}"
+                                Click="BrowseFolder_Click" />
+                    </Grid>
+
+                    <TextBlock Style="{StaticResource RowText}" Margin="0,14,0,4"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.historyLimit]}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="HistoryLimitBox" Width="110"
+                                 Text="{Binding HistoryLimit, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                 PreviewTextInput="HistoryLimitBox_PreviewTextInput"
+                                 PreviewKeyDown="HistoryLimitBox_PreviewKeyDown"
+                                 HorizontalContentAlignment="Center" />
+                        <TextBlock Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="11" Opacity="0.6"
+                                   Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.historyLimitRange]}" />
+                    </Grid>
+
+                    <!-- The list/card switch lives in the history top bar now (same place as on
+                         Android), so only the line count is configurable here. -->
+                    <TextBlock Style="{StaticResource RowText}" Margin="0,10,0,4"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.historyLines]}" />
+                    <StackPanel x:Name="HistoryLinesPanel" Orientation="Horizontal">
+                        <RadioButton GroupName="HistLines" Tag="1" Style="{StaticResource SegPill}" Content="1" Click="HistoryLines_Click" />
+                        <RadioButton GroupName="HistLines" Tag="2" Style="{StaticResource SegPill}" Content="2" Click="HistoryLines_Click" />
+                        <RadioButton GroupName="HistLines" Tag="3" Style="{StaticResource SegPill}" Content="3" Click="HistoryLines_Click" />
+                        <RadioButton GroupName="HistLines" Tag="4" Style="{StaticResource SegPill}" Content="4" Click="HistoryLines_Click" />
+                        <RadioButton GroupName="HistLines" Tag="5" Style="{StaticResource SegPill}" Content="5" Click="HistoryLines_Click" />
+                        <RadioButton GroupName="HistLines" Tag="6" Style="{StaticResource SegPill}" Content="6" Click="HistoryLines_Click" />
+                        <RadioButton GroupName="HistLines" Tag="7" Style="{StaticResource SegPill}" Content="7" Click="HistoryLines_Click" />
+                        <RadioButton GroupName="HistLines" Tag="8" Style="{StaticResource SegPill}" Content="8" Click="HistoryLines_Click" />
+                    </StackPanel>
+
+                    <!-- Window -->
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+
+                    <TextBlock Style="{StaticResource SectionTitle}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.behaviour]}" />
+                    <Grid Margin="0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.closeToTray]}" />
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding CloseToTray, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.minimizeToTray]}" />
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding MinimizeToTray, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.startMinimized]}" />
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding StartMinimized, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.autoStart]}" />
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding AutoStartWithWindows, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.rememberPlacement]}" />
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding RememberWindowPlacement, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!-- Hotkey / pinning -->
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+
+                    <TextBlock Style="{StaticResource SectionTitle}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.hotkey]}" />
+
+                    <Grid Margin="0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.hotkey]}" />
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding HotkeyEnabled, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="HotkeyBox"
+                                 Text="{Binding HotkeyGesture, Mode=OneWay}"
+                                 IsReadOnly="True" Cursor="Hand"
+                                 HorizontalContentAlignment="Center"
+                                 PreviewKeyDown="HotkeyBox_PreviewKeyDown"
+                                 GotKeyboardFocus="HotkeyBox_GotKeyboardFocus" />
+                        <Button Grid.Column="1" Margin="6,0,0,0" Style="{StaticResource SvcButton}"
+                                Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.hotkeyClear]}"
+                                Click="HotkeyClear_Click" />
+                    </Grid>
+
+                    <TextBlock Margin="0,4,0,0" FontSize="11" Opacity="0.6" TextWrapping="Wrap"
+                               Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                               Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.hotkeyDesc]}" />
+
+                    <Grid Margin="0,10,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.openPage]}" />
+                        <ComboBox x:Name="OpenPageCombo" HorizontalAlignment="Right" Width="150"
+                                  SelectedValuePath="Tag"
+                                  SelectedValue="{Binding OpenPageOnShow, Mode=TwoWay}">
+                            <ComboBoxItem Tag="all"
+                                          Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.openPageAll]}" />
+                            <ComboBoxItem Tag="text"
+                                          Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.openPageText]}" />
+                            <ComboBoxItem Tag="file"
+                                          Content="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.openPageFile]}" />
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Margin="0,8,0,2">
+                        <TextBlock Style="{StaticResource RowText}"
+                                   Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.alwaysOnTop]}" />
+                        <CheckBox HorizontalAlignment="Right" IsChecked="{Binding AlwaysOnTop, Mode=TwoWay}" />
+                    </Grid>
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SectionTitle}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.support]}" />
+                            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.supportHint]}" />
+
+                            <TextBlock Margin="0,14,0,2" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.faq]}" />
+                            <TextBlock Style="{StaticResource HintText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.faqHint]}" />
+                            <StackPanel Margin="0,8,0,0">
+                                <TextBlock FontSize="12" TextWrapping="Wrap"
+                                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.q1]}" />
+                                <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.a1]}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <TextBlock FontSize="12" TextWrapping="Wrap"
+                                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.q2]}" />
+                                <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.a2]}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <TextBlock FontSize="12" TextWrapping="Wrap"
+                                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.q3]}" />
+                                <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.a3]}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <TextBlock FontSize="12" TextWrapping="Wrap"
+                                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.q4]}" />
+                                <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.a4]}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <TextBlock FontSize="12" TextWrapping="Wrap"
+                                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.q5]}" />
+                                <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[faq.a5]}" />
+                            </StackPanel>
+                            <TextBlock Margin="0,16,0,2" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=PrimaryText}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.feedback]}" />
+                            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.feedbackHint]}" />
+
+                            <Grid Margin="0,10,0,0">
+                                <TextBlock Style="{StaticResource RowText}"
+                                           Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.feedbackKind]}" />
+                                <ComboBox x:Name="FeedbackKindBox" HorizontalAlignment="Right" Width="150"
+                                          SelectedIndex="0">
+                                    <ComboBoxItem Content="{Binding Source={x:Static services:I18n.Instance}, Path=[fb.kind.bug]}" />
+                                    <ComboBoxItem Content="{Binding Source={x:Static services:I18n.Instance}, Path=[fb.kind.ui]}" />
+                                    <ComboBoxItem Content="{Binding Source={x:Static services:I18n.Instance}, Path=[fb.kind.sync]}" />
+                                    <ComboBoxItem Content="{Binding Source={x:Static services:I18n.Instance}, Path=[fb.kind.idea]}" />
+                                </ComboBox>
+                            </Grid>
+
+                            <TextBox x:Name="FeedbackDetailBox" Margin="0,8,0,0" MinHeight="64"
+                                     AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top"
+                                     VerticalScrollBarVisibility="Auto"
+                                     ToolTip="{Binding Source={x:Static services:I18n.Instance}, Path=[fb.detail.placeholder]}" />
+
+                            <WrapPanel Margin="0,10,0,0">
+                                <Button Style="{StaticResource SvcButton}" Margin="0,0,8,8"
+                                        Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.copyReport]}"
+                                        Click="CopyReport_Click" />
+                                <Button Style="{StaticResource SvcButton}" Margin="0,0,8,8"
+                                        Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.exportLogs]}"
+                                        Click="ExportLogs_Click" />
+                                <Button Style="{StaticResource SvcButton}" Margin="0,0,8,8"
+                                        Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.reportBug]}"
+                                        Click="OpenIssues_Click" />
+                                <Button Style="{StaticResource SvcButton}" Margin="0,0,8,8"
+                                        Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.helpDoc]}"
+                                        Click="OpenHelpDoc_Click" />
+                            </WrapPanel>
+
+                            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.logsHint]}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource GroupCard}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SectionTitle}"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[lbl.aboutTitle]}" />
+                            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap"
+                                       Text="{Binding Source={x:Static services:I18n.Instance}, Path=[about.blurb]}" />
+                            <TextBlock Margin="0,8,0,0" FontSize="11" Opacity="0.7"
+                                       Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                                       Text="{Binding AppVersion, StringFormat='CBB {0}'}" />
+                            <WrapPanel Margin="0,10,0,0">
+                                <Button Style="{StaticResource SvcButton}" Margin="0,0,8,8"
+                                        Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.devHome]}"
+                                        Click="OpenDevHome_Click" />
+                                <Button Style="{StaticResource SvcButton}" Margin="0,0,8,8"
+                                        Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.forkHome]}"
+                                        Click="OpenForkHome_Click" />
+                            </WrapPanel>
+                            <!-- Two sponsor buttons, never one: the upstream author and this fork are
+                                 different people, and the label has to make that obvious. -->
+                            <WrapPanel Margin="0,2,0,0">
+                                <Button Style="{StaticResource SvcButton}" Margin="0,0,8,8"
+                                        Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.sponsorUpstream]}"
+                                        Click="OpenUpstreamSponsor_Click" />
+                                <Button Style="{StaticResource SvcButton}" Margin="0,0,8,8"
+                                        Content="{Binding Source={x:Static services:I18n.Instance}, Path=[btn.sponsorFork]}"
+                                        Click="OpenForkSponsor_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid Grid.Row="2" Margin="0,14,0,0">
+                <TextBlock VerticalAlignment="Center" FontSize="11" Opacity="0.6"
+                           Foreground="{Binding Source={x:Static services:ThemeManager.Instance}, Path=SecondaryText}"
+                           Text="{Binding AppVersion, StringFormat='CBB {0} · Bluetooth only'}" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

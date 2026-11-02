@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center"
+        android:background="#ebddff">
+
+    <!-- Title -->
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clip_sync"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="10dp" />
+
+    <!-- Control Buttons Row -->
+    <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginVertical="5dp">
+
+        <Button
+                android:text="@string/start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:backgroundTint="#356097"
+                android:maxHeight="70.dp"
+                android:minHeight="40.dp"
+                android:maxWidth="90.dp"
+                android:minWidth="40.dp" />
+
+        <Button
+                android:text="@string/share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:backgroundTint="#356097"
+                android:maxHeight="70.dp"
+                android:minHeight="40.dp"
+                android:maxWidth="90.dp"
+                android:minWidth="40.dp" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+        <!-- Sample Device 1 -->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="2dp">
+
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/samsung_galaxy_s24"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp" />
+
+        </LinearLayout>
+
+        <!-- Sample Device 2 -->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="2dp">
+
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/desktop_grptu23o34"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp" />
+
+        </LinearLayout>
+
+        <!-- Sample Device 3 -->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="2dp">
+
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pixel_8_pro"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

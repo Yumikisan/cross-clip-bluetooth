@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Cross Clip</string>
+    <!-- Name shown in the system share sheet. Kept short so it fits the sheet chip. -->
+    <string name="share_target_label">CBB</string>
+    <string name="support_url">https://github.com/aubynsamuel/clipsync-android/issues</string>
+    <string name="windows_companion_app">https://github.com/aubynsamuel/clipsync-windows/releases</string>
+
+    <string name="buy_me_a_coffee">https://www.buymeacoffee.com/aubynsamuel</string>
+    <string name="sourceCode">https://github.com/aubynsamuel/clipsync-android</string>
+
+    <string name="widget_description">A widget to quickly share your clipboard.</string>
+    <string name="loading_clip_sync">Loading CBB</string>
+    <string name="start">Start</string>
+    <string name="button">Button</string>
+    <string name="clip_sync">CBB</string>
+    <string name="share"> Share </string>
+
+    <string name="samsung_galaxy_s24">Samsung S24</string>
+    <string name="desktop_grptu23o34">Desktop-GTU98</string>
+    <string name="pixel_8_pro">Pixel 8 Pro</string>
+    <string name="image_description">WidgetPreview Image\n</string>
+
+    <!-- Shown in system accessibility settings. This permission can watch the screen, so the
+         description has to state exactly what is read and what is not. -->
+    <string name="accessibility_service_label">Cross Clip clipboard capture</string>
+    <string name="accessibility_service_summary">Captures copy actions so clipboard items can be synced to your paired Bluetooth devices</string>
+    <string name="accessibility_service_description">Detects copy actions (long press, tapping Copy, the copied popup) and reads the clipboard so text, an image or a file can be sent to the devices you selected in Cross Clip.
+
+It does not read what is on your screen, does not collect what you type, and does not upload anything: content only travels over your own Bluetooth link. When a password manager or banking app blocks clipboard reads, the attempt is skipped silently.
+
+Some ROMs reclaim background services aggressively. If automatic sync stops working, allow Cross Clip to autostart and to run without background restrictions.</string>
+</resources>

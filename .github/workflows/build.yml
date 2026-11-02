@@ -1,0 +1,77 @@
+name: build
+
+# Runs on demand and on tags, not on every push: a fork release is built and
+# tested on the maintainer's machines first, and a red X on main would say more
+# about the runner image than about the code.
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  android:
+    name: Android (unsigned release + unit tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Unit tests
+        working-directory: android
+        run: ./gradlew test --no-daemon --stacktrace
+
+      # No keystore in CI: the artifact proves the source compiles and packages.
+      # Signed APKs are produced locally or with CBB_STORE_* secrets.
+      - name: Assemble release
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-release
+          path: android/app/build/outputs/apk/release/*.apk
+          retention-days: 14
+
+  windows:
+    name: Windows (single file exe + self-test)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Publish
+        working-directory: windows
+        run: >
+          dotnet publish ClipSyncWindows.csproj -c Release -r win-x64 --self-contained
+          -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -o publish
+
+      # The security layer is verifiable without a phone: 19 checks over real
+      # TCP loopback pairs. A failure here is a release blocker.
+      - name: Security self-test
+        working-directory: windows
+        shell: pwsh
+        run: |
+          $exe = "publish/CBB.exe"
+          & $exe --selftest
+          $log = Join-Path $env:APPDATA "ClipSync/selftest.log"
+          Get-Content $log
+          if (-not (Select-String -Path $log -Pattern "^19/19 passed" -Quiet)) {
+            throw "security self-test did not report 19/19"
+          }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: windows/publish/CBB.exe
+          retention-days: 14

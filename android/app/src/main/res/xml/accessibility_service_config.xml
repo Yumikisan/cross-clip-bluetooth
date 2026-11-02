@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Clipboard capture through accessibility.
+
+  An AccessibilityService cannot subscribe to ClipboardManager's primary-clip callback, so this
+  config watches for the gestures that produce a copy: a long press (which opens the context
+  menu), a click (choosing Copy from it), and a window/appearance change (the "copied" popup
+  some ROMs show). The service then reads the clipboard itself; it does not try to read the
+  copied text out of the window, which is why canRetrieveWindowContent is only needed to observe
+  events, not to harvest screen content.
+
+  flagIncludeNotImportantViews matters more than it looks: context menus and "Copy" rows are
+  frequently marked as unimportant views, and flagDefault alone never reports clicks on them —
+  which is exactly the interaction being watched for.
+
+  notificationTimeout keeps the callback rate sane on chatty screens. The service applies its own
+  debounce and minimum interval on top of this.
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeViewClicked|typeViewLongClicked|typeWindowStateChanged|typeNotificationStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault|flagIncludeNotImportantViews"
+    android:canRetrieveWindowContent="true"
+    android:description="@string/accessibility_service_description"
+    android:notificationTimeout="200"
+    android:settingsActivity="com.aubynsamuel.clipsync.activities.MainActivity"
+    android:summary="@string/accessibility_service_summary" />

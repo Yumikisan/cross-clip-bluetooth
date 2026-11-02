@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>Assets/app.ico</ApplicationIcon>
+
+    <!-- Product identity: the executable keeps the CBB.exe name so existing shortcuts,
+         autostart entries and the installer upgrade path stay valid. The product name shown
+to users is "Cross Clip Bluetooth"; CBB is the internal short name. -->
+    <AssemblyName>CBB</AssemblyName>
+
+    <!-- Version Information -->
+    <FileVersion>2.4.27.0</FileVersion>
+    <Version>2.4.27</Version>
+
+    <!-- Assembly Metadata -->
+    <AssemblyTitle>Cross Clip Bluetooth</AssemblyTitle>
+    <AssemblyDescription>Cross Clip Bluetooth (CCB) — cross-platform clipboard and file sync between Windows and Android over Bluetooth Classic (RFCOMM/SPP), with an application-layer PSK + AES-256-GCM secure channel.</AssemblyDescription>
+    <Company>Cross Clip</Company>
+    <Product>Cross Clip Bluetooth</Product>
+    <AssemblyCopyright>Copyright 2025-2026 CBB (fork of ClipSync by aubynsamuel). All rights reserved.</AssemblyCopyright>
+    <AssemblyTrademark>Cross Clip Bluetooth</AssemblyTrademark>
+
+    <!-- Application Properties -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Win32Resource />
+    <StartupObject />
+
+    <!-- Build Configuration -->
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=C:\</PathMap>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- WinForms is only used for the tray icon / folder picker; drop its global usings so
+         WPF types such as Application and UserControl stay unqualified. -->
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Embedded as a WPF resource (not Content): single-file publish has no
+         Assets folder on disk, so a relative file reference would fail at
+         runtime with a XamlParseException. A pack URI always resolves. -->
+    <Resource Include="Assets\app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="InTheHand.Net.Bluetooth" Version="4.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+</Project>

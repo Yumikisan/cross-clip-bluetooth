@@ -37,6 +37,22 @@ Nothing here changes the premise: **Bluetooth only**. Transport is RFCOMM/SPP on
 
 Full, version-by-version detail: **[CHANGELOG.md](CHANGELOG.md)**. Protocol, trust boundaries and test reports: **[docs/](docs/)**.
 
+## Screenshots
+
+History on Windows: staggered two-column cards, thumbnails, a colour bar per content type, and the same layout in both themes.
+
+| Light | Dark |
+| --- | --- |
+| ![Windows history, light theme](docs/screenshots/win-history-light.png) | ![Windows history, dark theme](docs/screenshots/win-history-dark.png) |
+
+Android settings and the privacy section: two-sided 6-digit confirmation, layer-2 encryption, key fingerprint, built-in security self-test.
+
+| Settings | Privacy and security |
+| --- | --- |
+| ![Android settings](docs/screenshots/android-settings.png) | ![Android privacy and security](docs/screenshots/android-security.png) |
+
+Every entry, file name and timestamp in these captures is fabricated for the purpose; no real clipboard content, device name or account appears in them.
+
 ## Install
 
 Both artifacts are attached to the latest [Release](https://github.com/Yumikisan239/cross-clip-bluetooth/releases).
@@ -127,6 +143,22 @@ Part of this fork — the refactors, the defect hunts (handshake MAC layering, f
 | **防回声** | — | 文件/截图/自己写入的剪贴板内容都不会被当成"用户刚复制的"回传（按内容身份判定，跨服务重启生效） |
 
 逐版本明细见 **[CHANGELOG.md](CHANGELOG.md)**；协议、信任边界、握手状态机与三轮压力测试报告在 **[docs/](docs/)**。
+
+### 界面
+
+Windows 端历史：两列错落卡片、缩略图、按内容类型着色的标识条，浅色与深色主题一致。
+
+| 浅色 | 深色 |
+| --- | --- |
+| ![Windows 历史（浅色）](docs/screenshots/win-history-light.png) | ![Windows 历史（深色）](docs/screenshots/win-history-dark.png) |
+
+安卓端设置与「隐私与安全」：双端 6 位确认码、二层加密、密钥指纹、内置安全自检。
+
+| 设置 | 隐私与安全 |
+| --- | --- |
+| ![安卓设置](docs/screenshots/android-settings.png) | ![安卓隐私与安全](docs/screenshots/android-security.png) |
+
+以上截图中的历史条目、文件名与时间均为演示数据，不含真实剪贴板内容、设备名或账号信息。
 
 ### 安装
 

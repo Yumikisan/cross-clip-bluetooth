@@ -23,8 +23,8 @@ namespace ClipSyncWindows.Services
             // Shell
             ["app.title"] = ("Cross Clip", "Cross Clip"),
             ["app.subtitle"] = (
-                "Bluetooth clipboard bridge — cross-device sync over Bluetooth only",
-                "蓝牙剪贴板桥——纯蓝牙的跨设备剪贴板同步"),
+                "Bluetooth clipboard bridge: cross-device sync over Bluetooth only",
+                "蓝牙剪贴板桥：仅通过蓝牙的跨设备同步"),
             ["tab.devices"] = ("Devices", "设备"),
             ["tab.history"] = ("History", "历史"),
             ["tab.files"] = ("Files", "文件"),
@@ -90,14 +90,16 @@ namespace ClipSyncWindows.Services
             ["btn.ok"] = ("OK", "确定"),
             ["close.title"] = ("Close CBB", "关闭 CBB"),
             ["close.question"] = (
-                "Choose what happens when the window is closed. You can change this anytime in Settings.",
-                "选择关闭窗口后的行为，之后可随时在设置中修改。"),
+                "Choose what happens when the window is closed. This can be changed at any time in Settings.",
+                "选择关闭窗口后的行为，可随时在设置中更改。"),
             ["close.toTray"] = ("Minimize to the notification area when closed", "关闭时最小化到系统托盘"),
             ["btn.browse"] = ("Browse…", "浏览…"),
 
             // Labels
             ["lbl.selectDevices"] = ("Select devices to share clipboard with", "选择要同步的设备"),
-            ["lbl.noPairedDevices"] = ("No paired devices yet. Pair one in Windows Bluetooth settings first.", "还没有已配对的设备，请先在 Windows 蓝牙设置里配对。"),
+            ["lbl.noPairedDevices"] = (
+                "No paired devices. Pair one in Windows Bluetooth settings first.",
+                "暂无已配对设备，请先在 Windows 蓝牙设置中完成配对。"),
             ["btn.done"] = ("Done", "完成"),
 
             // ---- device manager
@@ -113,17 +115,25 @@ namespace ClipSyncWindows.Services
             ["dev.mayNotSupport"] = ("This device probably can not sync clipboards", "此设备可能不支持剪贴板同步"),
             ["dev.settingsTitle"] = ("Device settings", "设备设置"),
             ["dev.alwaysTrusted"] = ("Always trust", "始终信任"),
-            ["dev.alwaysTrustedHint"] = ("Skips the code prompt when connecting. Must be turned on on BOTH devices to avoid the code.", "此设备连接时不再弹确认码。需要两端都开启「始终信任」才能跳过核对码。"),
+            ["dev.alwaysTrustedHint"] = (
+                "Skips the confirmation code for this device. Both devices must enable Always trust for the code to be bypassed.",
+                "该设备连接时不再显示确认码。需在两端同时启用「始终信任」才能跳过核对。"),
             ["dev.autoReconnect"] = ("Reconnect automatically", "自动重连"),
-            ["dev.autoReconnectHint"] = ("Redial whenever the link drops. Off = connect only on refresh or restart.", "断线后自动重连。关掉后只在启动或点「刷新」时连一次。"),
+            ["dev.autoReconnectHint"] = (
+                "Reconnects whenever the link drops. When off, it connects only on refresh or restart.",
+                "断线后自动重连。关闭后仅在刷新或重新启动时连接一次。"),
             ["dev.fileSync"] = ("Sync files with this device", "与此设备同步文件"),
             ["dev.fileSyncHint"] = ("Turn off to send clipboard text only to this device.", "关掉后只向这台设备发文字剪贴板，不发文件。"),
             ["dev.hide"] = ("Hide from the list", "在列表中隐藏"),
             ["dev.hideHint"] = ("Keeps working if selected; just collapses into the Hidden group.", "已选中时仍会同步，只是收进「已隐藏」分组。"),
             ["dev.forget"] = ("Forget this device", "移除此设备"),
-            ["dev.forgetConfirm"] = ("Remove {0} from this app? The Windows pairing is kept.", "要从本应用移除「{0}」吗？Windows 的配对不会解除。"),
+            ["dev.forgetConfirm"] = (
+                "Remove {0} from this app? The Windows pairing is kept.",
+                "要从本应用移除「{0}」吗？Windows 配对将保留。"),
             ["dev.kind"] = ("Device type", "设备类型"),
-            ["dev.kindHint"] = ("Overrides the system-detected type; \"Auto\" infers it from the Bluetooth class and the name.", "覆盖系统识别的类型；「自动」按蓝牙类别和设备名推断。"),
+            ["dev.kindHint"] = (
+                "Overrides the system-detected device type; Auto infers it from the Bluetooth class and the device name.",
+                "覆盖系统识别的设备类型；「自动」依据蓝牙类别与设备名称推断。"),
             ["dev.kindAuto"] = ("Auto", "自动"),
             ["status.deviceForgotten"] = ("Removed {0}", "已移除 {0}"),
             ["lbl.search"] = ("Search history…", "搜索历史记录…"),
@@ -137,13 +147,13 @@ namespace ClipSyncWindows.Services
             ["lbl.security"] = ("Privacy & Security", "隐私与安全"),
             ["lbl.confirmCode"] = ("Require a confirmation code", "连接前需要双端确认码"),
             ["lbl.confirmCodeHint"] = (
-                "Both devices show the same 6-digit code and both must confirm it before any clipboard text or file is accepted",
-                "建链后两端会显示同一个 6 位确认码，双方都确认后才允许传输剪贴板文本或文件"),
+                "Both devices display the same 6-digit code after connecting, and both must confirm before clipboard text or files are accepted.",
+                "建立连接后两端显示同一 6 位确认码，双方均确认后才允许传输剪贴板文本或文件。"),
             // ---- layer 2: PSK + AES-256-GCM ----
             ["lbl.secMode"] = ("Encryption", "二层加密"),
             ["lbl.secModeHint"] = (
                 "App-level encryption on top of the Bluetooth link. Both ends must hold the same passphrase.",
-                "在蓝牙链路加密之上再加一层应用层加密。两端必须配置同一个预共享密钥。"),
+                "在蓝牙链路加密之上增加一层应用层加密。两端必须配置同一预共享密钥。"),
             ["lbl.secModeAuto"] = ("Auto (encrypt when keyed)", "自动（有密钥就加密）"),
             ["lbl.secModeRequire"] = ("Require (no key, no link)", "强制（无密钥不连接）"),
             ["lbl.secModeOff"] = ("Off (plaintext)", "关闭（明文）"),
@@ -154,19 +164,19 @@ namespace ClipSyncWindows.Services
             ["psk.placeholder"] = ("Enter a pre-shared key", "输入预共享密钥"),
             ["psk.confirmClearTitle"] = ("Clear the key", "清除密钥"),
             ["psk.confirmClear"] = (
-                "This removes the key stored on this device. Encrypted sync will stop working until you enter the same key again on both devices.\n\nClear it now?",
-                "将删除本机保存的密钥。在两端重新输入同一密钥之前，加密同步将无法使用。\n\n确定清除？"),
+                "This removes the key stored on this device. Encrypted sync stops working until the same key is entered on both devices.\n\nClear it now?",
+                "将删除本机保存的密钥。在两端重新输入同一密钥之前，加密同步不可用。\n\n确定清除？"),
             ["psk.show"] = ("Show key", "显示密钥"),
             ["psk.hide"] = ("Hide key", "隐藏密钥"),
             ["lbl.pskSave"] = ("Save", "保存"),
             ["lbl.pskClear"] = ("Clear", "清除"),
             ["lbl.secLog"] = ("Write security log", "记录安全日志"),
             ["lbl.secLogHint"] = (
-                "Frame and handshake diagnostics go to %APPDATA%\\ClipSync\\security.log; payload text is never written in a release build",
-                "帧与握手诊断写入 %APPDATA%\\ClipSync\\security.log；正式版不会写入任何载荷内容"),
+                "Frame and handshake diagnostics are written to %APPDATA%\\ClipSync\\security.log. Payload text is never written in a release build.",
+                "帧与握手诊断写入 %APPDATA%\\ClipSync\\security.log。正式版不会写入任何载荷内容。"),
             ["psk.notSet"] = (
-                "Not configured — links stay in plaintext until both ends share a key",
-                "尚未设置——两端配置同一个密钥之前，链路保持明文"),
+                "Not configured: links stay in plaintext until both ends share a key",
+                "尚未设置：两端配置同一密钥之前，链路保持明文"),
             ["psk.notSetShort"] = ("not set", "未设置"),
             ["psk.setShort"] = ("set", "已设置"),
             ["psk.set"] = ("Configured (fingerprint {0})", "已配置（指纹 {0}）"),
@@ -174,19 +184,19 @@ namespace ClipSyncWindows.Services
                 "At least {0} characters; both devices must use exactly the same one",
                 "至少 {0} 个字符；两端必须填写完全相同的密钥"),
             ["psk.tooShort"] = (
-                "Use at least {0} characters — this passphrase is the only thing protecting the traffic",
-                "请至少使用 {0} 个字符——这串密钥是保护通信的唯一凭据"),
+                "Use at least {0} characters; this passphrase is the only protection for the traffic.",
+                "请至少输入 {0} 个字符；该密钥是保护通信的唯一凭据。"),
             ["psk.storeFailed"] = (
-                "The key could not be stored on this device, so it was not saved. Try again.",
+                "The key could not be stored on this device and was not saved. Try again.",
                 "密钥在本机保存失败，未生效。请重试。"),
             ["psk.saved"] = ("Key saved on this device", "密钥已保存在本机"),
             ["psk.cleared"] = ("Key removed", "密钥已清除"),
             ["psk.clearedModeReset"] = (
-                "Encryption is now set to Auto, because Require cannot work without a key",
-                "加密模式已自动切回「自动」——「强制」在没有密钥时无法工作"),
+                "Encryption was switched to Auto because Require cannot operate without a key.",
+                "加密模式已切换为「自动」，因为「强制」模式在没有密钥时无法工作。"),
             ["secMode.needKey"] = (
-                "Set a pre-shared key first, otherwise Require mode refuses every connection",
-                "请先设置预共享密钥，否则「强制」模式会拒绝所有连接"),
+                "Set a pre-shared key first; Require mode refuses every connection without one.",
+                "请先设置预共享密钥；「强制」模式在没有密钥时会拒绝所有连接。"),
             ["secMode.state"] = ("Current: {0} · key {1}", "当前：{0} · 密钥{1}"),
             ["status.encrypted"] = ("encrypted", "已加密"),
             ["status.plaintext"] = ("plaintext", "明文"),
@@ -207,18 +217,18 @@ namespace ClipSyncWindows.Services
                 "Takes one minute. The key never leaves your devices.",
                 "一分钟即可完成，密钥不会离开你的设备"),
             ["wiz.intro1"] = (
-                "Bluetooth pairing only encrypts the radio between the two adapters. It does not prove which app is on the other end, and it cannot stop a replayed frame.",
-                "蓝牙配对只加密两个适配器之间的射频。它既不证明对面跑的是哪个应用，也挡不住被重复发送的旧数据。"),
+                "Bluetooth pairing encrypts only the radio link between the two adapters. It neither proves which application runs on the other end nor prevents a captured frame from being replayed.",
+                "蓝牙配对仅加密两个适配器之间的射频链路。它既不证明对端运行的是哪个应用，也无法阻止重放此前截获的数据帧。"),
             ["wiz.intro2"] = (
-                "That is why CBB adds its own layer: everything is encrypted again with a key only your two devices know, and every frame carries a sequence number so a replay is dropped.",
-                "所以 CBB 自己再加一层：用只有你两台设备知道的密钥再加密一次，每帧带序号，重放的旧帧会被直接丢弃。"),
+                "Cross Clip therefore adds a second layer: traffic is encrypted again with a key known only to these two devices, and every frame carries a sequence number, so a replayed frame is discarded.",
+                "因此 Cross Clip 在此基础上再增加一层：用仅这两台设备知晓的密钥重新加密，每帧携带序号，重放的帧会被直接丢弃。"),
             ["wiz.intro3"] = (
-                "Both devices must use exactly the same key. Set it here and on the phone — the wizard will show a fingerprint so you can check they match.",
-                "两端必须填写完全相同的密钥。这里设置一次，手机上再设置一次——向导会给出密钥指纹，方便你核对两边是否一致。"),
+                "Both devices must use exactly the same key. Set it here and again on the phone. The wizard shows a fingerprint so both ends can be compared.",
+                "两端必须使用完全相同的密钥。此处设置一次，再在手机上设置一次；向导会显示密钥指纹，供核对两端是否一致。"),
             ["wiz.optGenerate"] = ("Generate a random key", "生成一串随机密钥"),
             ["wiz.optGenerateHint"] = (
-                "Recommended. 80 bits, no look-alike characters, easy to read off one screen and type into the other.",
-                "推荐。80 位随机，去掉了易混淆字符，方便从一台设备的屏幕抄到另一台。"),
+                "Recommended. 80 random bits without look-alike characters, so the key is easy to transcribe to the other device.",
+                "推荐。80 位随机字符，已排除易混淆字符，便于抄录到另一台设备。"),
             ["wiz.optExisting"] = ("I already have a key", "我已经有密钥了"),
             ["wiz.optExistingHint"] = (
                 "Type the one the other device is already using.",
@@ -229,8 +239,8 @@ namespace ClipSyncWindows.Services
                 "自己起一串密钥。越长越好，一句话胜过单个词。"),
             ["wiz.generatedTitle"] = ("Your new key", "你的新密钥"),
             ["wiz.generatedHint"] = (
-                "On the phone open Settings → Security setup → \"I already have a key\" and type this in. The dashes are optional.",
-                "在手机上打开 设置 → 安全设置 → 「我已经有密钥了」，把这串填进去。中间的横线可以不打。"),
+                "On the phone, open Settings → Security setup → \"I already have a key\" and enter this key. Hyphens are optional.",
+                "在手机上打开 设置 → 安全设置 →「我已经有密钥了」，填入该密钥。连字符可省略。"),
             ["wiz.copy"] = ("Copy", "复制"),
             ["wiz.copied"] = ("Copied to clipboard", "已复制到剪贴板"),
             ["wiz.existingTitle"] = ("Paste the existing key", "填入已有的密钥"),
@@ -243,8 +253,8 @@ namespace ClipSyncWindows.Services
                 "至少 {0} 个字符，两端必须一致。"),
             ["wiz.suggest"] = ("Use a generated one instead", "改用系统随机生成"),
             ["wiz.fingerprint"] = (
-                "Key fingerprint: {0} — the other device must show the same six characters",
-                "密钥指纹：{0}——另一端显示的六位应当一模一样"),
+                "Key fingerprint: {0}. The other device must display the same six characters.",
+                "密钥指纹：{0}。另一端显示的六位字符必须与此一致。"),
             ["wiz.finish"] = ("Save key", "保存密钥"),
             ["wiz.later"] = ("Later", "以后再说"),
             ["wiz.storeFailed"] = (
@@ -252,29 +262,43 @@ namespace ClipSyncWindows.Services
                 "密钥在本机保存失败，未生效。"),
             ["wiz.runFromSettings"] = ("Security setup guide", "安全设置引导"),
             ["wiz.savedHint"] = (
-                "Key saved. Make sure the other device uses the same one — if it does not, links are refused and the device card says so.",
-                "密钥已保存。请确认另一端填写了同一串——若不一致，连接会被拒绝，设备卡片上会显示原因。"),
+                "Key saved. Confirm that the other device uses the same key; if it does not, connections are refused and the device card states the reason.",
+                "密钥已保存。请确认另一端使用同一密钥；若不一致，连接会被拒绝，设备卡片上会显示原因。"),
 
             ["lbl.transfer"] = ("Transfer", "传输"),
             ["lbl.sendFileSection"] = ("Send a file", "发送文件"),
             // ---- help & feedback -------------------------------------------------------
             ["history_back_to_top"] = ("Back to top", "回到顶部"),
             ["lbl.support"] = ("Help & feedback", "帮助与反馈"),
-            ["lbl.supportHint"] = ("Something not working? Start here — everything below runs locally, nothing is uploaded.", "遇到问题先看这里：以下操作全部在本机完成，不会上传任何内容。"),
+            ["lbl.supportHint"] = (
+                "Troubleshooting starts here. Everything below runs locally; nothing is uploaded.",
+                "故障排查从此处开始。以下操作均在本机完成，不会上传任何内容。"),
             ["lbl.faq"] = ("Before you ask", "提问前先自查"),
             ["lbl.faqHint"] = ("The five that explain most reports.", "这几条能解决大部分反馈。"),
             ["faq.q1"] = ("Paired, but nothing syncs", "已配对，但内容同步不过去"),
-            ["faq.a1"] = ("Open the devices page and check the link state. \"Connected, encrypted\" means the link is fine — then confirm both sides use the same passphrase and the same security mode.", "在设备页看链路状态。「已连接 · 已加密」说明链路正常，再确认两端密钥与安全模式一致。"),
+            ["faq.a1"] = (
+                "Check the link state on the Devices page. \"Connected, encrypted\" indicates a healthy link; then verify that both ends use the same passphrase and security mode.",
+                "在设备页查看链路状态。「已连接 · 已加密」表示链路正常，随后请核对两端口令与安全模式是否一致。"),
             ["faq.q2"] = ("Copy on the phone never arrives", "手机上复制，电脑收不到"),
-            ["faq.a2"] = ("Android 10+ forbids background clipboard reads unless Shizuku (or the accessibility helper) is running. Grant one of them, then make sure the app is not battery-restricted.", "Android 10+ 禁止后台读取剪贴板，必须让 Shizuku 或无障碍辅助保持运行，并关闭对该应用的电池限制。"),
+            ["faq.a2"] = (
+                "Android 10 and later forbid background clipboard reads unless Shizuku or the accessibility helper is running. Grant one of them and remove the app from battery restrictions.",
+                "Android 10 及更高版本禁止应用在后台读取剪贴板，必须让 Shizuku 或无障碍辅助保持运行，并取消对该应用的电池限制。"),
             ["faq.q3"] = ("Encrypted mode refuses to connect", "加密模式一直连不上"),
-            ["faq.a3"] = ("A passphrase mismatch looks exactly like a link failure. Re-enter the same key on both sides (12 characters or more), or switch to auto and connect once to verify the link itself.", "密钥不一致和连接故障表现一样。请两端重新输入同一串密钥（12 位以上），或先切到自动模式验证连接本身。"),
+            ["faq.a3"] = (
+                "A passphrase mismatch produces the same symptoms as a connection failure. Re-enter the same key on both ends (at least 12 characters), or switch to automatic mode to verify the link itself.",
+                "口令不一致与连接故障的症状相同。请在两端重新输入同一密钥（至少 12 个字符），或先切换为自动模式以验证链路本身。"),
             ["faq.q4"] = ("A file is refused as too large", "文件提示超出上限"),
-            ["faq.a4"] = ("The size cap applies to the sender and is enforced again on the receiver. Raise it in File transfer, or turn on \"ignore size limits\" for one-off big transfers.", "大小上限在发送端与接收端各生效一次。可在「文件传输」里调高，或临时打开「无视大小限制」。"),
+            ["faq.a4"] = (
+                "The size limit is enforced on the sending and the receiving end. Raise it under File transfer, or enable \"ignore size limits\" for a one-off transfer.",
+                "大小上限在发送端与接收端各校验一次。可在「文件传输」中调高上限，或为一次性传输临时启用「无视大小限制」。"),
             ["faq.q5"] = ("A received folder looks empty", "收到的文件夹是空的"),
-            ["faq.a5"] = ("Empty sub-folders are kept only while the transfer completes. If the link dropped mid-way the folder may be partial — resend it; the receiving side never leaves half-written files.", "空子目录只在传输完整结束时保留。若中途断链，文件夹可能不完整，请重发；接收端不会留下写了一半的文件。"),
+            ["faq.a5"] = (
+                "Empty sub-folders are preserved only when a transfer completes. If the link drops mid-way the folder may be partial; send it again. The receiving end never leaves partially written files.",
+                "空子目录仅在传输完整结束时保留。若中途断链，文件夹可能不完整，请重新发送；接收端不会留下写入不完整的文件。"),
             ["lbl.feedback"] = ("Send feedback", "发送反馈"),
-            ["lbl.feedbackHint"] = ("Pick a category, describe what happened, then copy the report. It already includes version and system details.", "选一个类别、写下发生了什么，然后复制反馈内容——里面已经带好版本与系统信息。"),
+            ["lbl.feedbackHint"] = (
+                "Select a category, describe the issue, then copy the report. Version and system details are included.",
+                "选择类别并描述问题，然后复制反馈内容；版本与系统信息会自动附带。"),
             ["lbl.feedbackKind"] = ("Category", "反馈类别"),
             ["fb.kind.bug"] = ("It does not work", "功能异常"),
             ["fb.kind.ui"] = ("Display or layout", "界面显示"),
@@ -284,7 +308,9 @@ namespace ClipSyncWindows.Services
             ["fb.detail.placeholder"] = ("What you did, what you expected, what happened instead", "你做了什么、期望怎样、实际怎样"),
             ["btn.copyReport"] = ("Copy report", "复制反馈内容"),
             ["btn.exportLogs"] = ("Export logs…", "导出日志…"),
-            ["lbl.logsHint"] = ("Logs stay on this machine. The export writes a zip to your desktop so you can attach it yourself.", "日志只留在本机。导出会在桌面生成一个 zip，由你自行决定是否附上。"),
+            ["lbl.logsHint"] = (
+                "Logs remain on this machine. The export writes a zip file to the desktop for you to attach if needed.",
+                "日志仅保存在本机。导出会在桌面生成一个 zip 文件，由你决定是否附上。"),
             ["btn.reportBug"] = ("Report on GitHub", "到 GitHub 提交"),
             ["btn.devHome"] = ("Developer", "开发者主页"),
             ["btn.forkHome"] = ("Fork home", "分支主页"),
@@ -296,7 +322,9 @@ namespace ClipSyncWindows.Services
             ["msg.logsEmpty"] = ("No logs to export yet", "暂无可导出的日志"),
             ["msg.logsFailed"] = ("Could not write the zip — is the desktop writable?", "无法写入 zip，请检查桌面是否可写"),
             ["lbl.aboutTitle"] = ("About", "关于"),
-            ["about.blurb"] = ("An enhanced fork by Yumikisan: the Windows and Android apps are released together from this branch. The original Cross Clip is by aubynsamuel - this build adds to his work rather than replacing it. Bluetooth-only, no LAN, no cloud, no telemetry.", "这是 Yumikisan 的增强分支：Windows 端与安卓端由本分支一同发行。原项目 Cross Clip 由 aubynsamuel 开发，本分支是在他的成果上做增补，而不是另起一个项目。纯蓝牙、不走局域网、不上云、不收集任何数据。"),
+            ["about.blurb"] = (
+                "An enhanced fork of Cross Clip by Yumikisan. The Windows and Android apps are released together from this branch. The original project is by aubynsamuel; this branch builds on his work rather than replacing it. Bluetooth only: no LAN, no cloud, no telemetry.",
+                "本构建是 Yumikisan 基于 Cross Clip 的增强分支，Windows 端与安卓端由本分支一同发行。原项目由 aubynsamuel 开发，本分支在其成果上增补，并非独立项目。仅使用蓝牙：不使用局域网，不上传云端，不收集任何数据。"),
             ["lbl.behaviour"] = ("Window & startup", "窗口与启动"),
             ["lbl.language"] = ("Language", "界面语言"),
             ["lbl.theme"] = ("Theme", "主题"),
@@ -317,10 +345,12 @@ namespace ClipSyncWindows.Services
             ["lbl.rememberPlacement"] = ("Remember window position and size", "记忆窗口位置和大小"),
             ["lbl.openFileLocation"] = ("Open the containing folder on double-click", "双击条目时打开所在位置"),
             ["lbl.openFileLocationHint"] = (
-                "A single click still copies the entry; a double click opens Explorer with it selected. Folders open themselves.",
-                "单击仍然是复制；双击才打开资源管理器并选中该条目。文件夹条目双击直接打开文件夹"),
+                "A single click copies the entry; a double click opens Explorer with the file selected. Folder entries open directly.",
+                "单击复制条目；双击打开资源管理器并选中该文件。文件夹条目双击即打开文件夹。"),
             ["lbl.ignoreSizeLimit"] = ("Ignore size limit", "忽略大小上限"),
-            ["lbl.ignoreSizeLimitHint"] = ("Stop blocking transfers over the limit. Classic Bluetooth is slow, so use it for one-off cases.", "不再按上限拦截传输。经典蓝牙吞吐有限，建议只在临时需要时开启。"),
+            ["lbl.ignoreSizeLimitHint"] = (
+                "Stops blocking transfers that exceed the limit. Classic Bluetooth throughput is limited, so enable this only when necessary.",
+                "不再按上限拦截传输。蓝牙经典吞吐有限，建议仅在临时需求时启用。"),
             ["lbl.maxFileSize"] = ("Max file size", "文件大小上限"),
             ["lbl.maxFileSizeHint"] = ("Files larger than this are refused before any transfer starts", "超过该大小的文件会在传输开始前被拒绝"),
             ["lbl.adaptive"] = ("Adapt to link quality", "根据链路质量自适应"),
@@ -330,7 +360,9 @@ namespace ClipSyncWindows.Services
                 "Copy a file or an image and it is transferred as a file, not as a path",
                 "复制文件或截图时，直接传输文件内容而不是路径"),
             ["lbl.autoHidePeripherals"] = ("Auto-hide audio & input devices", "自动隐藏音频、键鼠设备"),
-            ["lbl.autoHidePeripheralsHint"] = ("Sweep headphones, speakers, keyboards and mice into Hidden, judged by Bluetooth class and name.", "按蓝牙类别和名称，把耳机、音箱、键鼠收进「已隐藏」组。"),
+            ["lbl.autoHidePeripheralsHint"] = (
+                "Groups headphones, speakers, keyboards and mice under Hidden, based on Bluetooth class and device name.",
+                "依据蓝牙类别与设备名称，将耳机、音箱、键盘和鼠标归入「已隐藏」分组。"),
             ["lbl.downloadFolder"] = ("Save folder", "接收目录"),
             ["lbl.historyLimit"] = ("History entries", "历史记录条数"),
             ["lbl.historyLimitRange"] = ("20 – 2000 (type a number)", "20 – 2000（直接输入数字）"),
@@ -361,8 +393,8 @@ namespace ClipSyncWindows.Services
             ["lbl.editColors"] = ("Set colours by type…", "分类型设置颜色…"),
             ["lbl.accentCustomTitle"] = ("Colours by type", "分类型颜色"),
             ["lbl.accentCustomHint"] = (
-                "Pick the bar colour for each text format and file kind. Unset types keep the default.",
-                "为每种文本类型、每种文件类型分别取色；没设置的类型沿用默认色。"),
+                "Choose the bar colour for each text format and file kind. Types left unset keep the default colour.",
+                "为每种文本格式与文件类型分别设置标识色；未设置的类型沿用默认颜色。"),
             ["lbl.pickColor"] = ("Pick a colour", "选择颜色"),
             ["lbl.resetDefaults"] = ("Restore defaults", "恢复默认"),
             ["lbl.density"] = ("List spacing", "列表间距"),
@@ -371,12 +403,12 @@ namespace ClipSyncWindows.Services
             ["lbl.densityCozy"] = ("Relaxed", "宽松"),
             ["lbl.showSource"] = ("Show source device name", "显示同步来源设备的名称"),
             ["lbl.showSourceHint"] = (
-                "Off hides the device name under each entry; useful with a single phone.",
-                "关闭后每条记录下方不再显示设备名，只与一台设备同步时更清爽。"),
+                "When off, the device name is hidden under each entry. Useful when syncing with a single phone.",
+                "关闭后不在每条记录下方显示设备名，仅与一台设备同步时更简洁。"),
             ["lbl.thumbnails"] = ("Image thumbnails", "图片缩略图"),
             ["lbl.thumbnailsHint"] = (
                 "Shows a 4:3 preview on image entries. Decoded once and kept in memory.",
-                "为图片条目显示 4:3 预览图。只解码一次并缓存在内存中。"),
+                "为图片条目显示 4:3 预览图。仅解码一次并缓存于内存。"),
             ["lbl.closeFilterOnReset"] = ("Close filter after Reset", "重置筛选后关闭窗口"),
             ["lbl.closeFilterOnResetHint"] = (
                 "Off keeps the panel open with the conditions cleared.",
@@ -427,7 +459,9 @@ namespace ClipSyncWindows.Services
                 "请先勾选接收设备，再拖入文件"),
             ["lbl.hotkeyUnset"] = ("Not set", "未设置"),
             ["lbl.hotkey"] = ("Hotkey", "快捷键"),
-            ["lbl.hotkeyDesc"] = ("Click the box and press the combination (needs Ctrl / Alt / Shift / Win)", "点进输入框后直接按下组合键（必须含 Ctrl / Alt / Shift / Win）"),
+            ["lbl.hotkeyDesc"] = (
+                "Click the box and press the combination (must include Ctrl / Alt / Shift / Win).",
+                "点击输入框后按下组合键（必须包含 Ctrl / Alt / Shift / Win）。"),
             ["lbl.hotkeyClear"] = ("Clear", "清除"),
             ["lbl.openPage"] = ("Page opened on summon", "唤起时打开的页面"),
             ["lbl.openPageAll"] = ("All entries", "全部记录"),
@@ -452,7 +486,9 @@ namespace ClipSyncWindows.Services
             ["lbl.effectiveLimit"] = ("Current limit", "当前上限"),
             ["lbl.version"] = ("Version", "版本"),
             ["lbl.about"] = ("Bluetooth only. No LAN, no cloud, no account.", "仅使用蓝牙，不走局域网、不上云、不需要账号"),
-            ["lbl.trayHint"] = ("CBB is still running in the notification area", "CBB 仍在托盘中运行"),
+            ["lbl.trayHint"] = (
+                "Cross Clip is still running in the notification area",
+                "Cross Clip 仍在托盘中运行"),
             ["lbl.chars"] = ("chars", "字符"),
             ["lbl.dir.local"] = ("This PC", "本机"),
             ["lbl.dir.in"] = ("Received", "接收"),
@@ -494,17 +530,17 @@ namespace ClipSyncWindows.Services
 
             // Actionable Bluetooth failures — raw Winsock text is useless to the user
             ["status.errBtOff"] = (
-                "Computer Bluetooth is off or not ready. Turn Bluetooth on in Windows settings, then retry.",
-                "电脑蓝牙未开启或尚未就绪。请在 Windows 设置里打开蓝牙，然后重新点一次「启动服务」。"),
+                "Bluetooth on this computer is off or not ready. Turn it on in Windows settings, then start the service again.",
+                "电脑蓝牙未开启或尚未就绪。请在 Windows 设置中开启蓝牙，然后重新启动服务。"),
             ["status.errNotInRange"] = (
-                "Device unreachable. Make sure its Bluetooth is on, it is nearby and it is paired.",
-                "设备连不上。请确认对方蓝牙已打开、就在附近，并且已经和这台电脑配对。"),
+                "The device is unreachable. Confirm its Bluetooth is on, that it is nearby, and that it is paired.",
+                "设备无法连接。请确认对方蓝牙已开启、位于附近，且已与本机配对。"),
             ["status.errTimeout"] = (
                 "Connection timed out — the device did not answer.",
                 "连接超时 — 对方没有响应。"),
             ["status.noPairedDevices"] = (
                 "No paired devices found. Pair your phone in Windows Bluetooth settings first.",
-                "未找到已配对设备。请先在 Windows 蓝牙设置里把手机配对。"),
+                "未找到已配对设备。请先在 Windows 蓝牙设置中配对手机。"),
             ["status.btNotReadyRetry"] = (
                 "Bluetooth not ready yet — retrying in the background…",
                 "蓝牙尚未就绪 — 正在后台自动重试…"),
@@ -551,7 +587,7 @@ namespace ClipSyncWindows.Services
                 "两端确认码不一致 — 链路可能被劫持，已断开"),
             ["status.authPeerUnsupported"] = (
                 "the other device does not support confirmation codes; update it to 2.0 or turn the code off here",
-                "对端版本不支持确认码；请把对端也升级到 2.0，或在设置里关闭确认码"),
+                "对端版本不支持确认码；请将其升级至 2.0，或在此处关闭确认码"),
             ["status.authPending"] = (
                 "Waiting for the connection code to be confirmed",
                 "连接尚未确认，暂时不能传输"),
@@ -561,8 +597,12 @@ namespace ClipSyncWindows.Services
             ["dlg.fileTitle"] = ("Choose a file to send", "选择要发送的文件"),
             ["dlg.allFiles"] = ("All files", "所有文件"),
             ["dlg.clearHistory"] = ("Clear all history entries?", "确定清空全部历史记录？"),
-            ["dlg.trayTitle"] = ("CBB", "CBB"),
-            ["dlg.trayShow"] = ("Open CBB", "打开 CBB"),
+            ["dlg.trayTitle"] = (
+                "Cross Clip",
+                "Cross Clip"),
+            ["dlg.trayShow"] = (
+                "Open Cross Clip",
+                "打开 Cross Clip"),
             ["dlg.trayStart"] = ("Start service", "启动服务"),
             ["dlg.trayStop"] = ("Stop service", "停止服务"),
             ["dlg.trayExit"] = ("Quit", "退出"),
@@ -571,8 +611,8 @@ namespace ClipSyncWindows.Services
             ["dlg.authTitle"] = ("Confirm connection", "连接确认"),
             ["dlg.authPeer"] = ("{0} wants to sync the clipboard with this PC", "「{0}」请求与这台电脑同步剪贴板"),
             ["dlg.authInstruction"] = (
-                "Check that the other device shows exactly the same 6-digit code. Only confirm when both match.",
-                "请确认另一台设备上显示的 6 位数字与此处完全相同。只有在两端一致时才点「确认」。"),
+                "Confirm that the other device shows exactly the same 6-digit code. Confirm only when both match.",
+                "请确认另一台设备显示的 6 位数字与此处完全一致。两端一致时再确认。"),
             ["dlg.authCountdown"] = ("Auto-reject in {0} s", "{0} 秒后自动拒绝"),
             ["dlg.authAccept"] = ("Confirm", "确认"),
             ["dlg.authReject"] = ("Reject", "拒绝"),

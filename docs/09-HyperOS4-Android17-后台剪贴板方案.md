@@ -305,6 +305,23 @@ HyperOS 把 `shizuku_server`（uid 2000）与包 `moe.shizuku.privileged.api` �
   的 **binder 会话托管**与**启动脚本路径兼容**逻辑；该兼容层向下/向前兼容 HyperOS 4 基于
   Android 17 的底层。
 
+**根因证据（本机 `adb logcat -d -b crash` 实录，可直接复现）**：
+
+```
+FATAL EXCEPTION: binder:28793_4
+java.lang.AbstractMethodError: abstract method
+  "void android.app.IProcessObserver.onProcessStarted(int, int, int, java.lang.String, java.lang.String)"
+  on receiver java.lang.Class<rikka.shizuku.server.a$a>
+    at android.app.IProcessObserver$Stub.onTransact(IProcessObserver.java:122)
+    at android.os.Binder.execTransactInternal(Binder.java:1376)
+```
+
+读法：Android 16 给 `IProcessObserver` 这个 binder 接口**新增了 `onProcessStarted` 抽象方法**，
+旧版 Shizuku 的实现类（`rikka.shizuku.server.a$a`）是照旧接口编译的，没有实现它。系统一投递
+进程回调，`onTransact` 就抛 `AbstractMethodError`，服务进程当场死掉 —— 这**就是「拉起瞬间
+被撤销」的真实机理**，与"系统是否允许 shell 身份读剪贴板"毫无关系。所以升级版本即可解决，
+不需要 root，也不需要换管理器。
+
 ### 10.2 前置依赖要求（硬性）
 
 > **HyperOS 4 / Android 17 用户要使用 Shizuku 特权通道，强制要求 Shizuku ≥ v13.6.0，

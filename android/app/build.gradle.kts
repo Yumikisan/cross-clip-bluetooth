@@ -24,8 +24,8 @@ android {
         applicationId = "com.aubynsamuel.clipsync"
         minSdk = 24
         targetSdk = 36
-        versionCode = 90
-        versionName = "2.5.12"
+        versionCode = 91
+        versionName = "2.5.13"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

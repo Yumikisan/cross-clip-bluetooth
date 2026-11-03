@@ -98,7 +98,7 @@ Planned, not promised — the order is roughly the order of usefulness:
 3. **Incremental folder sync.** Today a folder is copied file by file; only the changed files should travel.
 4. **Richer clipboard payloads.** Images and rich text in both directions, not just Windows→Android for PNG.
 5. **Packaging.** A signed Windows installer next to the portable exe, and a build badge that does not lie.
-6. **Android 17 background clipboard.** Currently impossible without a privileged channel; the app says so honestly instead of pretending (see `docs/09-…`).
+6. **Android 17 background clipboard.** Impossible for ordinary apps; a privileged channel restores it, but only with **Shizuku v13.6.0+ (official Rikka build)** — older versions (≤13.5.4) lose their binder session right after start on Android 16+. This is a version dependency, not a permanent OS block (see `docs/09-…`).
 
 Explicitly **not** planned: a BLE/GATT rewrite (a research branch exists and will never be merged — RFCOMM is the reason this works on every phone), and iOS/macOS ports (no Bluetooth Classic SPP).
 
@@ -217,7 +217,7 @@ cd android && gradle test # 帧协议 / 握手 / 文件夹 / 取消 的单元测
 3. **文件夹增量同步**：现在逐文件全量复制，只传变化的部分才是正解。
 4. **更丰富的剪贴板**：双向图片与富文本（现在只有电脑→手机的 PNG）。
 5. **打包**：除便携单文件外，补一个签名的 Windows 安装包。
-6. **安卓 17 后台剪贴板**：系统把 `READ_CLIPBOARD` 收成了前台 op，后台直读在 HyperOS 4 上已彻底不可用；等系统放开或出现合规通道再跟进，这期间应用如实告知，不假装能读。
+6. **安卓 17 后台剪贴板**：系统把 `READ_CLIPBOARD` 收成了前台 op，普通应用后台直读不可用。**但这不等于封死**：装 **Shizuku v13.6.0 及以上（Rikka 官方原版）** 并启用特权通道后即可恢复后台读取（旧版 ≤13.5.4 会在 Android 16+ 上被瞬间撤销会话，看起来像"彻底不可用"，实为版本问题）。未装特权通道时应用如实告知，不假装能读。
 
 **明确不做**：BLE/GATT 重写（留了一个只做预研、永不合并的分支——蓝牙经典是这工具能在各种机型上跑通的全部原因）；iOS/macOS（没有 Bluetooth Classic SPP）。
 

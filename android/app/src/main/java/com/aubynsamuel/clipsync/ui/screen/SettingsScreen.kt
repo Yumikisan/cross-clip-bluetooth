@@ -1579,10 +1579,10 @@ private fun ClipboardChannelCard() {
                 }) { Text(t("clip_send_now"), fontSize = 12.sp) }
             }
 
-            // Privileged providers: still offered because they work on this family of ROMs up to
-            // Android 16, and because an already-installed one keeps syncing on 17. No new
-            // promotion on 17 — the platform blocks it there and telling users otherwise is worse
-            // than saying nothing.
+            // Privileged providers work on Android 17 as well: what fails there is only Shizuku
+            // builds older than 13.6.0, whose binder session is revoked right after start (the
+            // platform added a method to IProcessObserver that those builds do not implement).
+            // So the entry stays visible and the minimum version is stated instead of hidden.
             if (shizukuInstalled || (axInstalled && blocked)) {
                 Row(
                     modifier = Modifier.padding(top = 4.dp),
@@ -1621,6 +1621,20 @@ private fun ClipboardChannelCard() {
                 }
                 Text(
                     t("provider_kill_hint"),
+                    fontSize = 11.sp,
+                    color = colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 2.dp)
+                )
+                // The minimum version and the "list is empty but it works" behaviour are the two
+                // things users hit first, so they belong next to the button they press.
+                Text(
+                    t("provider_body"),
+                    fontSize = 11.sp,
+                    color = colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+                Text(
+                    t("provider_list_hint"),
                     fontSize = 11.sp,
                     color = colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 2.dp)

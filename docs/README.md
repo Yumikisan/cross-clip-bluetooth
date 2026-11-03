@@ -78,7 +78,7 @@ JAVA_HOME=... tools/jdk21/... tools/gradle-8.14.3/bin/gradle :app:testDebugUnitT
 | # | 文档 | 内容 |
 |---|---|---|
 | 07 | [传输层扩展接口规范](07-传输层扩展接口规范.md) | `TransportLink` / `IPeerLink` 的契约，接新链路要满足什么 |
-| 09 | [HyperOS 4 / Android 17 后台剪贴板方案](09-HyperOS4-Android17-后台剪贴板方案.md) | 系统把 `READ_CLIPBOARD` 收成前台 op 之后，什么能做什么不能做 |
+| 09 | [HyperOS 4 / Android 17 后台剪贴板方案](09-HyperOS4-Android17-后台剪贴板方案.md) | 系统把 `READ_CLIPBOARD` 收成前台 op 之后，什么能做什么不能做（含 2026-11-03 修正：Shizuku v13.6.0+ 可恢复特权通道） |
 | 10 | [文案规范](10-文案规范.md) | 双端双语文案的写法与命名（避免"文件已不可用"这类误报） |
 | 11 | [压力测试报告 · 第一轮](11-任务4测试报告-第一轮.md) | 大文件连发，挖出的缺陷与修复 |
 | 12 | [压力测试报告 · 第二轮](12-任务4测试报告-压力测试.md) | 剪贴板高频、断链注入、息屏后台、内存基线 |

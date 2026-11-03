@@ -25,5 +25,6 @@ windows/.vs/
 # --- repository ------------------------------------------------------------
 dist/
 release/
+release_build/
 *.log
 *.user

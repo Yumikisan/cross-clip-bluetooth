@@ -37,8 +37,7 @@ namespace ClipSyncWindows.Services
         private static readonly ManualResetEventSlim Finished = new(false);
         private static Thread? _worker;
 
-        public static string Dir => Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ClipSync");
+        public static string Dir => AppPaths.DataDir;
 
         /// <summary>Call once, first thing on startup. Never throws.</summary>
         public static void Install()

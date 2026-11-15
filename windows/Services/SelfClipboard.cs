@@ -20,10 +20,7 @@ namespace ClipSyncWindows.Services
     {
         private static readonly object Gate = new();
 
-        private static string StatePath => Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "ClipSync",
-            "selfclip.txt");
+        private static string StatePath => AppPaths.Combine("selfclip.txt");
 
         public static void RecordFile(string path, long size) =>
             Write("f|" + Path.GetFileName(path) + "|" + size);

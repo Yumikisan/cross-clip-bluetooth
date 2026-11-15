@@ -21,11 +21,14 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.aubynsamuel.clipsync"
+        // Own identifier, so this build and the official ClipSync can be installed at the same
+        // time. The Kotlin namespace stays on the upstream package: it only names the classes,
+        // and moving 300+ files for that would buy nothing.
+        applicationId = "com.yumikisan.crossclip"
         minSdk = 24
         targetSdk = 36
-        versionCode = 91
-        versionName = "2.5.13"
+        versionCode = 92
+        versionName = "2.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

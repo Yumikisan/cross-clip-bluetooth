@@ -8,6 +8,11 @@
 > 内部类名/命名空间（`ClipSyncWindows`、`com.aubynsamuel.clipsync`）保持不变 ——
 > 改包名会导致安卓端无法覆盖安装、Windows 端丢配置，收益为零。
 > 单实例互斥名仍为 `Local\ClipSync.SingleInstance`，这样 2.1.x 与 2.2.0 不会同时启动两份。
+>
+> **上面后两条在 2.6.0 被推翻**（原作者 aubynsamuel 明确建议改用独立 ID，好让两个应用并存）：
+> `applicationId` → `com.yumikisan.crossclip`、配置目录 → `%APPDATA%\CrossClip`、
+> 互斥名 → `Local\CrossClip.SingleInstance`。理由从"收益为零"变成"必须能同时安装"。
+> Kotlin 包名/命名空间（`com.aubynsamuel.clipsync`）仍然不动 —— 它只给类命名，与安装标识无关。
 
 本仓库把上游两个项目合并成一个 monorepo：
 
@@ -29,14 +34,14 @@
 
 | 文件 | 说明 |
 | --- | --- |
-| `CCB-Windows-2.4.27.exe` | **当前版本（Windows）**。自包含单文件，双击即用，无需安装 .NET 运行时 |
-| `CCB-Android-2.5.13.apk` | **当前版本（安卓）**。`versionCode 91` / `versionName 2.5.13`，已签名 |
+| `CCB-Windows-2.5.0.exe` | **当前版本（Windows）**。自包含单文件，双击即用，无需安装 .NET 运行时 |
+| `CCB-Android-2.6.0.apk` | **当前版本（安卓）**。`versionCode 92` / `versionName 2.6.0`，已签名 |
 
 安装包不在仓库里，都在 [Releases](https://github.com/Yumikisan/cross-clip-bluetooth/releases)。
 命名从 2.2.0 起由 `ClipSync-Fork-*` 改为 `CBB-*`，从 2.3.0 起再由 `CBB-*` 改为 `CCB-*`。
 
-> 安卓端 `applicationId` 与上游相同（`com.aubynsamuel.clipsync`），
-> 若已装过官方版，**必须先卸载**（签名不同，无法覆盖安装）。
+> 安卓端 `applicationId` 自 2.6.0 起为 `com.yumikisan.crossclip`，**可与官方版同时安装**。
+> 2.5.x 及更早的包沿用上游 ID（`com.aubynsamuel.clipsync`），装过官方版的机器需先卸载。
 > **先说清一件事：本应用从来不用 BLE/GATT。** 整条链路是蓝牙经典（Bluetooth Classic）的 RFCOMM/SPP，服务 UUID 固定 `8ce255c0-200a-11e0-ac64-0800200c9a66`；双端全仓检索 `BluetoothGatt / BluetoothLeScanner / AdvertisementWatcher` 均为 0 处。所以「手机连手机搜不到 GATT 服务」并不是 GATT 服务没广播，而是根本没有 GATT——连接、广播、服务发现全部落在 RFCOMM 上。
 > 文档修正（2026-11-03）= **推翻「HyperOS 4 / Android 17 上 Shizuku 特权通道不可用」的旧结论**。
 > ① **旧结论错在哪**：之前判定"Android 17 彻底封死"时用的是 Shizuku ≤ 13.5.4（仅适配到 Android 15）。Android 16+ 新的 Binder / ADB 会话回收逻辑会在服务拉起瞬间撤销会话，表现为"刚启动就断开"，被误读成系统封死。
@@ -46,6 +51,13 @@
 > ⑤ **保活不变**：依然不能清除 Shizuku / AxManager 的最近任务卡片，否则特权服务会被 HyperOS 直接终止。
 > ⑥ **边界**：Shizuku 通道恢复 ≠ 放开小米私有系统命令白名单（`svc nfc toggle` 等依旧被系统拦截）；后台静默读剪贴板仍受谷歌框架限制，复制后仍需打开一次本应用。
 > ⑦ 已同步修改：`docs/09-…`（新增第十节）、`README.md`、设置页「剪贴板读取通道 / 特权通道」说明文案（中英双语，随下一版安卓包生效）。
+> 2.6.0 = **独立身份：改用自有 applicationId，可与官方 ClipSync 同时安装（安卓 2.6.0 / vc 92；Windows 2.5.0）**。
+> ① 原作者 **aubynsamuel** 在讨论区回复：「Feel free to change the ID and the name. In fact, I suggest changing it, as it will make it easier to distinguish and will also allow both apps to be installed at the same time.」本版据此执行。
+> ② 安卓 `applicationId`：`com.aubynsamuel.clipsync` → **`com.yumikisan.crossclip`**。Manifest 里的 `${applicationId}.fileProvider` / `${applicationId}.shizuku` 是占位符，自动跟随；**Kotlin 包名与 `namespace` 保持不变**（348 处 package/import 无需改动，改它只增加风险、不改变任何安装行为）。
+> ③ Windows 配置目录：`%APPDATA%\ClipSync` → **`%APPDATA%\CrossClip`**（新增 `Services/AppPaths.cs` 统一出口）。首次启动若新目录不存在而旧目录存在，**自动复制一份**——口令、历史、设置全部保留；旧目录原样不动，官方版继续用自己的，互不干扰。
+> ④ 单实例互斥名 `Local\ClipSync.SingleInstance` → `Local\CrossClip.SingleInstance`；开机启动项注册表值名 `ClipSync` → `Cross Clip`（旧值在首次切换时被接管并删除，不会开机启动两份）。
+> ⑤ 蓝牙 SDP 服务名 `ClipSync` → `Cross Clip`（仅为 SDP 记录显示名）。**RFCOMM UUID（`8ce255c0-…`）与 `CBB-HS-*` / `CBB-MASTER-v1` / `CBB-KEY-*` / `ClipSync-SAS-v1` 协议标签一律不动**，因此 Cross Clip 仍能与官方 ClipSync 互传。
+> ⑥ 升级注意：安卓换了 ID 读不到旧包的私有存储（`Android/data/<包名>/files`），会以**全新档案**启动，口令需重新配一次；Windows 自动迁移，无需重配。
 > 2.5.13 = **设置页文案修正：把版本要求真正写进界面（安卓 2.5.13 / vc 91，仅手机端）**。
 > ① 上一轮改文案时漏了一步：`provider_body` / `provider_title` / `help_shizuku_body` 这三个 key **在界面里没有任何渲染点**，改了也只在源码里，用户打开 App 依旧看不到「必须 Shizuku ≥ v13.6.0」。本版把它们接进「剪贴板读取通道」卡片，显式写出 **Shizuku ≥ v13.6.0（Rikka 官方原版）或 AxManager**，并说明旧版在 Android 16 及更高版本上启动后会话即被系统撤销。
 > ② 新增排坑一行：**在 Shizuku 自带的授权列表里看不到本应用，属于新版的正常现象**，以下方「检测通道」的结果为准（不要以列表有无判断可用性）。
@@ -696,7 +708,7 @@ Shizuku 跑在 shell uid（2000）下，shell 有权限直接访问 `clipboard` 
 | 端 | 路径 | 轮转 |
 |---|---|---|
 | Windows | `%APPDATA%\ClipSync\security.log` | 2 MB |
-| 安卓 | `Android/data/com.aubynsamuel.clipsync/files/security.log` | 512 KB |
+| 安卓 | `Android/data/com.yumikisan.crossclip/files/security.log`（2.5.x 及更早为 `com.aubynsamuel.clipsync`） | 512 KB |
 
 关键字：`negotiate:` / `handshake:` / `session READY, encrypted` / `drop:` / `SECURITY-FAILED:`。
 **Release 包不打印明文**，只有 Debug 构建才会输出 `tx`/`rx` 内容。

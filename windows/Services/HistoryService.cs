@@ -27,8 +27,7 @@ namespace ClipSyncWindows.Services
         public HistoryService(int limit = 300)
         {
             _limit = Math.Clamp(limit, 20, 2000);
-            var folder = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ClipSync");
+            var folder = AppPaths.DataDir;
             Directory.CreateDirectory(folder);
             _path = Path.Combine(folder, "history.json");
             Load();

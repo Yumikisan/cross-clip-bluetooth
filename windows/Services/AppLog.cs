@@ -9,7 +9,7 @@ namespace ClipSyncWindows.Services
     ///
     /// Kept deliberately simple: transfers are the one area where "nothing happened" gives
     /// the user nothing to report, so every link event lands in
-    /// <c>%APPDATA%\ClipSync\transfer.log</c> where it can be read or sent along with a bug
+    /// <c>%APPDATA%\CrossClip\transfer.log</c> where it can be read or sent along with a bug
     /// report. Files are capped so the log can never grow without bound.
     /// </summary>
     public static class AppLog
@@ -17,10 +17,7 @@ namespace ClipSyncWindows.Services
         private const long MaxBytes = 512 * 1024;
         private static readonly object Gate = new();
 
-        public static string FilePath => Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "ClipSync",
-            "transfer.log");
+        public static string FilePath => AppPaths.Combine("transfer.log");
 
         public static void Write(string category, string message)
         {

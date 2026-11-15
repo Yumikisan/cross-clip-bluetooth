@@ -172,8 +172,8 @@ namespace ClipSyncWindows.Services
             ["lbl.pskClear"] = ("Clear", "清除"),
             ["lbl.secLog"] = ("Write security log", "记录安全日志"),
             ["lbl.secLogHint"] = (
-                "Frame and handshake diagnostics are written to %APPDATA%\\ClipSync\\security.log. Payload text is never written in a release build.",
-                "帧与握手诊断写入 %APPDATA%\\ClipSync\\security.log。正式版不会写入任何载荷内容。"),
+                "Frame and handshake diagnostics are written to %APPDATA%\\CrossClip\\security.log. Payload text is never written in a release build.",
+                "帧与握手诊断写入 %APPDATA%\\CrossClip\\security.log。正式版不会写入任何载荷内容。"),
             ["psk.notSet"] = (
                 "Not configured: links stay in plaintext until both ends share a key",
                 "尚未设置：两端配置同一密钥之前，链路保持明文"),

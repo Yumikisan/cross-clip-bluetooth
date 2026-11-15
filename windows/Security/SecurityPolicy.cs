@@ -112,8 +112,7 @@ namespace ClipSyncWindows.Security
             get
             {
                 if (_path != null) return _path;
-                var dir = System.IO.Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ClipSync");
+                var dir = Services.AppPaths.DataDir;
                 Directory.CreateDirectory(dir);
                 _path = System.IO.Path.Combine(dir, "security.log");
                 return _path;

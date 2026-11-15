@@ -590,7 +590,7 @@ class BluetoothService : Service() {
 
         serviceScope.launch {
             try {
-                serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord("ClipSync", SERVICE_UUID)
+                serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Cross Clip", SERVICE_UUID)
                 acceptThread = Thread({ acceptLoop() }, "rfcomm-accept").apply {
                     isDaemon = true
                     start()

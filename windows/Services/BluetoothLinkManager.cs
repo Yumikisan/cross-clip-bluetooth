@@ -536,7 +536,7 @@ namespace ClipSyncWindows.Services
             if (IsRunning) return;
 
             var cts = new CancellationTokenSource();
-            var listener = new BluetoothListener(ServiceUuid) { ServiceName = "ClipSync" };
+            var listener = new BluetoothListener(ServiceUuid) { ServiceName = "Cross Clip" };
 
             try
             {

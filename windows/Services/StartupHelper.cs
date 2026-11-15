@@ -7,14 +7,25 @@ namespace ClipSyncWindows.Services
     public static class StartupHelper
     {
         private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
-        private const string ValueName = "ClipSync";
+        private const string ValueName = "Cross Clip";
+
+        /// <summary>
+        /// Name used by the pre-rename builds. Left in place it would launch the app a second
+        /// time from a stale path, so it is adopted on the first toggle and deleted afterwards.
+        /// </summary>
+        private const string LegacyValueName = "ClipSync";
 
         public static bool IsEnabled()
         {
             try
             {
                 using var key = Registry.CurrentUser.OpenSubKey(RunKey);
-                return key?.GetValue(ValueName) is string s && s.Length > 0;
+                if (key == null) return false;
+                if (key.GetValue(ValueName) is string s && s.Length > 0) return true;
+
+                // An upgrading user already asked for "start with Windows"; report it as on so the
+                // toggle reflects their intent and the entry gets rewritten to the new name.
+                return key.GetValue(LegacyValueName) is string legacy && legacy.Length > 0;
             }
             catch
             {
@@ -39,6 +50,11 @@ namespace ClipSyncWindows.Services
                 {
                     key.DeleteValue(ValueName, throwOnMissingValue: false);
                 }
+
+                // Either way the legacy entry goes: on, because two copies must not start; off,
+                // because the user just turned startup off.
+                if (key.GetValue(LegacyValueName) != null)
+                    key.DeleteValue(LegacyValueName, throwOnMissingValue: false);
             }
             catch
             {

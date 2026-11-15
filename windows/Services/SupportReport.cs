@@ -33,8 +33,7 @@ namespace ClipSyncWindows.Services
         public const string ForkSponsorUrl = "https://afdian.com/a/Yumikisan239AFD";
 
         /// <summary>Folder the app keeps its configuration and logs in.</summary>
-        public static string DataFolder => Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ClipSync");
+        public static string DataFolder => AppPaths.DataDir;
 
         /// <summary>
         /// Environment block pasted at the top of every report. Kept short on purpose: the useful

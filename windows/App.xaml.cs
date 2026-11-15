@@ -34,7 +34,7 @@ namespace ClipSyncWindows
             Services.CrashGuard.Install();
             Services.CrashGuard.StartWatchdog();
 
-            // Never die silently: log to %APPDATA%\ClipSync\error.log and tell the user.
+            // Never die silently: log to %APPDATA%\CrossClip\error.log and tell the user.
             DispatcherUnhandledException += (_, args) =>
             {
                 ReportFatal(args.Exception);
@@ -52,10 +52,10 @@ namespace ClipSyncWindows
                 args.SetObserved();
             };
 
-            // Only one instance may own the RFCOMM listener on this machine. The name is
-            // deliberately unchanged from the pre-rename builds: an old and a new instance must
-            // not both hold the listener.
-            _singleInstanceMutex = new Mutex(true, @"Local\ClipSync.SingleInstance", out var isFirst);
+            // Only one instance of *this* build may own the RFCOMM listener on this machine.
+            // The name is scoped to CrossClip on purpose: the official ClipSync must be able to
+            // run at the same time, otherwise "install both" would not work.
+            _singleInstanceMutex = new Mutex(true, @"Local\CrossClip.SingleInstance", out var isFirst);
             _ownsMutex = isFirst;
             if (!isFirst)
             {
@@ -116,8 +116,7 @@ namespace ClipSyncWindows
 
             try
             {
-                var dir = System.IO.Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ClipSync");
+                var dir = Services.AppPaths.DataDir;
                 System.IO.Directory.CreateDirectory(dir);
                 System.IO.File.AppendAllText(
                     System.IO.Path.Combine(dir, "error.log"),

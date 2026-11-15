@@ -63,9 +63,12 @@ JAVA_HOME=... tools/jdk21/... tools/gradle-8.14.3/bin/gradle :app:testDebugUnitT
 
 | 端 | 安全日志 |
 |---|---|
-| Windows | `%APPDATA%\ClipSync\security.log`（2 MB 轮转） |
-| Android | `Android/data/com.aubynsamuel.clipsync/files/security.log`（512 KB 轮转） |
-| 传输日志（Windows） | `%APPDATA%\ClipSync\transfer.log` |
+| Windows | `%APPDATA%\CrossClip\security.log`（2 MB 轮转） |
+| Android | `Android/data/com.yumikisan.crossclip/files/security.log`（512 KB 轮转） |
+| 传输日志（Windows） | `%APPDATA%\CrossClip\transfer.log` |
+
+> 2.6.0 起配置目录与包名改为自有标识。2.5.x 及更早的版本仍在
+> `%APPDATA%\ClipSync`、`Android/data/com.aubynsamuel.clipsync`；Windows 首次启动会自动把旧目录复制过来。
 
 日志关键字：`negotiate:` / `handshake:` / `session READY` / `drop:` / `SECURITY-FAILED:`。
 

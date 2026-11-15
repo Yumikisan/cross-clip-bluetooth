@@ -15,8 +15,8 @@ to users is "Cross Clip Bluetooth"; CBB is the internal short name. -->
     <AssemblyName>CBB</AssemblyName>
 
     <!-- Version Information -->
-    <FileVersion>2.4.27.0</FileVersion>
-    <Version>2.4.27</Version>
+    <FileVersion>2.5.0.0</FileVersion>
+    <Version>2.5.0</Version>
 
     <!-- Assembly Metadata -->
     <AssemblyTitle>Cross Clip Bluetooth</AssemblyTitle>

@@ -15,10 +15,7 @@ namespace ClipSyncWindows.Services
 
         static SettingsService()
         {
-            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var appFolder = Path.Combine(appDataPath, "ClipSync");
-            Directory.CreateDirectory(appFolder);
-            _settingsFilePath = Path.Combine(appFolder, "settings.json");
+            _settingsFilePath = AppPaths.Combine("settings.json");
             _current = Load();
         }
 

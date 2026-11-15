@@ -62,7 +62,9 @@ I Service : send binder to user app moe.shizuku.privileged.api in user 0
 
 ### 1.3 AppOps 自授予能不能替代 shell 代理
 
-执行 `cmd appops set --uid com.aubynsamuel.clipsync READ_CLIPBOARD allow` → 回读确认 `Uid mode: READ_CLIPBOARD: allow`。
+执行 `cmd appops set --uid com.yumikisan.crossclip READ_CLIPBOARD allow` → 回读确认 `Uid mode: READ_CLIPBOARD: allow`。
+
+> 包名自 2.6.0 起为 `com.yumikisan.crossclip`；2.5.x 及更早的包仍是 `com.aubynsamuel.clipsync`，按实际安装的版本填。
 
 然后把已知字符串写进剪贴板，观察应用自己的日志：
 

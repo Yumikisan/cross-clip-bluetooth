@@ -57,8 +57,12 @@ Every entry, file name and timestamp in these captures is fabricated for the pur
 
 Both artifacts are attached to the latest [Release](https://github.com/Yumikisan/cross-clip-bluetooth/releases).
 
-- **Windows** — `CCB-Windows-<ver>.exe`, a self-contained single file. Double click, no .NET runtime needed. Unpack it anywhere; settings live in `%APPDATA%\ClipSync`.
-- **Android** — `CCB-Android-<ver>.apk`. The `applicationId` is the same as upstream (`com.aubynsamuel.clipsync`) but the signing key is not, so **uninstall the official build first**. Later fork versions install over each other normally.
+- **Windows** — `CCB-Windows-<ver>.exe`, a self-contained single file. Double click, no .NET runtime needed. Unpack it anywhere; settings live in `%APPDATA%\CrossClip`.
+- **Android** — `CCB-Android-<ver>.apk`. It uses its own `applicationId` (`com.yumikisan.crossclip`), so it **installs alongside the official ClipSync** instead of replacing it. Later fork versions install over each other normally.
+
+Both apps can be installed and used at the same time. The Bluetooth UUID is shared with upstream on purpose, so a Cross Clip device can still sync with a ClipSync device — only the app identity, settings folder and background services are separate.
+
+Upgrading from a pre-2.6 build: Android starts with a clean profile (a different `applicationId` cannot read the old one's private storage — re-pair the passphrase once), while Windows migrates `%APPDATA%\ClipSync` to `%APPDATA%\CrossClip` automatically on first launch.
 
 Pair the two devices in the OS first, then open both apps and select the peer in the device list.
 
@@ -164,8 +168,12 @@ Windows 端历史：两列错落卡片、缩略图、按内容类型着色的标
 
 两个平台的安装包都在最新的 [Release](https://github.com/Yumikisan/cross-clip-bluetooth/releases) 里。
 
-- **Windows**：`CCB-Windows-<版本>.exe`，自包含单文件，双击即用，不需要装 .NET 运行时。配置在 `%APPDATA%\ClipSync`。
-- **安卓**：`CCB-Android-<版本>.apk`。`applicationId` 与原版相同（`com.aubynsamuel.clipsync`），但**签名不同**，装过官方版的机器必须先卸载；本分支后续版本之间可以直接覆盖安装。
+- **Windows**：`CCB-Windows-<版本>.exe`，自包含单文件，双击即用，不需要装 .NET 运行时。配置在 `%APPDATA%\CrossClip`。
+- **安卓**：`CCB-Android-<版本>.apk`。`applicationId` 是本项目自己的 `com.yumikisan.crossclip`，因此**可以和官方版 ClipSync 同时安装**，不会互相覆盖；本分支后续版本之间可以直接覆盖安装。
+
+两个应用可以同时装、同时用。蓝牙 UUID 刻意与上游保持一致，所以 Cross Clip 仍能与官方 ClipSync 互传——分开的只是应用身份、配置目录和后台服务。
+
+从 2.6 之前的版本升级：安卓会以全新档案启动（换了 `applicationId` 读不到旧包的私有存储，口令需重新配一次）；Windows 首次启动会把 `%APPDATA%\ClipSync` 自动迁移到 `%APPDATA%\CrossClip`。
 
 先在系统设置里把两台设备配好对，再打开两端应用，在设备列表里勾选对端。
 

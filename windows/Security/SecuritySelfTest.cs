@@ -27,8 +27,7 @@ namespace ClipSyncWindows.Security
         {
             // Keep the diagnostics of this run away from the live link log: this test fails
             // handshakes on purpose, and those lines are indistinguishable from a real incident.
-            var shared = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ClipSync");
+            var shared = Services.AppPaths.DataDir;
             try
             {
                 Directory.CreateDirectory(shared);
@@ -86,8 +85,7 @@ namespace ClipSyncWindows.Security
             var text = sb.ToString();
             try
             {
-                var target = System.IO.Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ClipSync");
+                var target = Services.AppPaths.DataDir;
                 Directory.CreateDirectory(target);
                 File.WriteAllText(System.IO.Path.Combine(target, "selftest.log"), text, Encoding.UTF8);
             }
